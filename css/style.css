@@ -284,6 +284,14 @@ body {
   opacity: 0.5;
 }
 
+/* ---- Avatar ---- */
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 /* ---- Avatar Placeholder ---- */
 .avatar-placeholder {
   width: 80px;
