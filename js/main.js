@@ -26,6 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateNavActive(pageName);
     showPageElements(page);
     window.scrollTo(0, 0);
+
+    // Focus first heading for screen reader announcement
+    const heading = page.querySelector('h1, h2');
+    if (heading) {
+      heading.setAttribute('tabindex', '-1');
+      heading.focus({ preventScroll: true });
+    }
   }
 
   // ---- 1. Hash Router ----
@@ -60,12 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
       target.classList.add('page-entering');
       activatePage(target, pageName);
 
-      const onEnd = () => {
+      const unlock = () => {
         target.classList.remove('page-entering');
         isNavigating = false;
-        target.removeEventListener('animationend', onEnd);
+        target.removeEventListener('animationend', unlock);
+        clearTimeout(fallback);
       };
-      target.addEventListener('animationend', onEnd);
+      target.addEventListener('animationend', unlock);
+      // Safety fallback if animationend never fires
+      const fallback = setTimeout(unlock, 500);
     }, TRANSITION_DURATION);
   }
 
@@ -124,6 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   window.addEventListener('hashchange', () => navigateTo(getPageFromHash()));
+
+  // Prevent placeholder href="#" links from changing the hash
+  document.querySelectorAll('a[href="#"]').forEach((link) => {
+    if (!link.dataset.page && !link.dataset.bsToggle) {
+      link.addEventListener('click', (e) => e.preventDefault());
+    }
+  });
 
   // ---- 3. Initial Load ----
 
