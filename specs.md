@@ -10,8 +10,9 @@
 1. [File Structure](#file-structure)
 2. [CDN Dependencies](#cdn-dependencies)
 3. [Color Palette & CSS Custom Properties](#color-palette--css-custom-properties)
-4. [Global Accessibility Requirements](#global-accessibility-requirements)
-5. [Section Specs](#section-specs)
+4. [Global CSS Utilities](#global-css-utilities)
+5. [Global Accessibility Requirements](#global-accessibility-requirements)
+6. [Section Specs](#section-specs)
    - [1. Navigation](#1-navigation)
    - [2. Hero](#2-hero)
    - [3. About](#3-about)
@@ -20,8 +21,8 @@
    - [6. Team](#6-team)
    - [7. Contact](#7-contact)
    - [8. Footer](#8-footer)
-6. [JavaScript Modules (main.js)](#javascript-modules-mainjs)
-7. [CSS Architecture (style.css)](#css-architecture-stylecss)
+7. [JavaScript Modules (main.js)](#javascript-modules-mainjs)
+8. [CSS Architecture (style.css)](#css-architecture-stylecss)
 
 ---
 
