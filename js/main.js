@@ -6,11 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const navbar = document.getElementById('navbar');
 
   const handleNavbarScroll = () => {
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
   };
 
   window.addEventListener('scroll', handleNavbarScroll, { passive: true });
