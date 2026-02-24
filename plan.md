@@ -1,194 +1,146 @@
-# eBoxr.com — Modern Portfolio Website Plan
+# Plan: Convert eBoxr.com to SPA-Style Virtual Page Navigation
 
 ## Context
 
-eBoxr is a small two-person (Stephanie & Nicolas) iOS/web app development company that needs a modern portfolio website at eboxr.com. The site will showcase their apps (starting with Card Wallet, an iOS Apple Wallet management app), present the team, and provide contact information. Currently the project directory is empty — this is a fresh build.
+The site currently stacks 8 sections vertically with smooth-scroll navigation. The goal is to keep a single `index.html` but make it **feel like a multi-page site** — only one "page" visible at a time, with fade+slide transitions, hash-based routing, and browser back/forward support. Contact section is removed entirely.
 
-## Tech Stack
+---
 
-- **Static HTML** — single `index.html` with smooth-scroll sections
-- **Bootstrap 5.3.8** via CDN (dark mode with `data-bs-theme="dark"`)
-- **Bootstrap Icons 1.13.1** via CDN
-- **Inter font** via Google Fonts CDN
-- **Custom CSS + JS** — no build tools, no npm
+## Virtual Pages (5)
 
-## Visual Style
+| Hash | Page | In Nav? | Content |
+|------|------|---------|---------|
+| `#home` | Home | Yes | Hero: headline, tagline, 2 CTAs ("About Us" → #about, "Meet the Team" → #team) |
+| `#about` | About | No (CTA from Home) | About eBoxr text + stats card (2 Devs, iOS & Web, 100% Passion, Quality) |
+| `#services` | Services | Yes | 3 service cards (iOS, Web, UI/UX) |
+| `#card-wallet` | Card Wallet | Yes (Apps dropdown) | Card Wallet showcase (screenshot placeholder, features, App Store CTA) |
+| `#team` | Team | Yes | Stephanie & Nicolas profiles with social links |
 
-Dark navy theme (`#0a0e27`) with glassmorphism cards, blue-to-cyan gradient accents, orange CTA buttons, floating decorative orbs, and scroll-triggered fade animations.
+**Nav bar:** Home, Services, Apps▾ (Card Wallet), Team
+**Removed:** About nav link, Contact nav link, Contact section
+**Footer:** Persists outside page system, visible on all pages
 
-## File Structure
+---
 
+## Files to Modify
+
+### 1. `index.html` — HTML restructuring
+
+**Navigation changes:**
+- Remove "About" and "Contact" nav links
+- Add "Home" as first nav link: `<a class="nav-link" href="#home" data-page="home">Home</a>`
+- Add `data-page` attribute to all nav links for router binding
+- Apps dropdown: toggle stays as dropdown opener, "Card Wallet" item gets `data-page="card-wallet"`
+- Brand logo: `href="#home"`
+
+**Section restructuring:**
+- Wrap each kept section in `<section class="page" data-page="...">` with unique ID
+- Home page (`#home`): keep hero content, change CTAs:
+  - "See Our Work" → "About Us" linking to `#about`
+  - "Get in Touch" → "Meet the Team" linking to `#team`
+  - Add `nav-page-link` class to both CTA buttons for router interception
+- About page (`#about`): keep existing about text + stats card, wrap as page
+- Services page (`#services`): keep 3 service cards, wrap as page
+- Card Wallet page (`#card-wallet`): keep app showcase content, wrap as page (remove `app-section` class)
+- Team page (`#team`): keep both profile cards, wrap as page
+- **Delete:** Contact section entirely (lines 300-364)
+- Home page gets `page-active` class as default
+- Replace all `animate-on-scroll` → `page-enter-animate` throughout
+
+**Footer:** Stays outside `<main>`, no changes needed
+
+### 2. `css/style.css` — CSS changes
+
+**Remove:**
+- `html { scroll-behavior: smooth; }` — no more scrolling between sections
+- `.glass-nav.scrolled` variant — navbar is always frosted now
+- `.animate-on-scroll` / `.animate-on-scroll.animated` — replaced by page system
+- `.glass-input` styles (lines 121-137) — contact form removed
+- Scroll-based navbar transition logic
+
+**Modify:**
+- `.glass-nav`: always apply frosted glass (blur, bg, border) — no `.scrolled` needed
+- `.hero-section`: remove `padding-top: 5rem` (the `.page` wrapper handles navbar offset), keep `min-height: calc(100vh - 72px)`
+- Active nav link: add `.nav-link.page-active` with gradient underline indicator
+
+**Add:**
+```css
+/* Virtual Page System */
+.page { display: none; min-height: calc(100vh - 72px); padding-top: 72px; }
+.page.page-active { display: block; }
+.page.page-entering { animation: pageEnter 0.4s ease forwards; }
+.page.page-exiting { animation: pageExit 0.3s ease forwards; }
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pageExit {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Page-enter animations (replaces scroll animations) */
+.page-enter-animate { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.page-active .page-enter-animate.animated { opacity: 1; transform: translateY(0); }
 ```
-eboxr.com/
-├── index.html              (~450 lines)
-├── css/
-│   └── style.css           (~350 lines)
-├── js/
-│   └── main.js             (~120 lines)
-├── assets/
-│   └── images/             (empty, for future logos/screenshots)
-└── plan.md                 (this file)
-```
 
-## Sections (in order)
+**Update `prefers-reduced-motion`:** Add page system classes — skip all animations, show pages instantly
 
-### 1. Navigation — Fixed-top glassmorphism navbar
-- Logo: `<span class="gradient-text">e</span>Boxr`
-- Links: About, Services, Apps (dropdown with Card Wallet), Team, Contact
-- Transparent on top, frosted-glass on scroll (JS adds `.scrolled` class)
-- Mobile hamburger via Bootstrap collapse
+**Update responsive:** Adjust `.page` padding-top for mobile navbar height (56px)
 
-### 2. Hero — Full-viewport animated intro
-- Animated gradient background (`@keyframes gradientShift`)
-- 3 decorative floating blurred orbs (CSS-only)
-- Headline: "We build apps that **matter.**" (gradient text)
-- Sub-text + two CTAs: "See Our Work" (orange) + "Get in Touch" (outline)
+### 3. `js/main.js` — Complete rewrite
 
-### 3. About — Two-column layout
-- Left: text about eBoxr (small team, quality focus)
-- Right: glassmorphism card with stats (2 Developers, iOS, Web, 100% Passion)
+**Remove all 5 existing modules** (navbar scroll, scrollspy, scroll animations, mobile nav close, contact form)
 
-### 4. Services — Three glass cards in a row
-- iOS Development (`bi-phone`), Web Applications (`bi-globe`), UI/UX Design (`bi-palette`)
-- Hover effect: gradient top-border slides in
+**New modules (4):**
 
-### 5. Apps/Portfolio — Card Wallet showcase
-- Left: screenshot placeholder in glass card frame
-- Right: iOS badge, title, description, feature checklist, App Store CTA button
-- Each app gets its own `id` for nav dropdown linking
-- Future apps alternate image/text sides via `flex-lg-row-reverse`
+1. **Hash Router** — core SPA logic:
+   - `getPageFromHash()` — parse URL hash, validate against known pages, default to `home`
+   - `navigateTo(pageName)` — exit-animate current page → show target page with enter animation
+   - `showPage(page)` — display page, trigger `page-enter-animate` elements with staggered delays
+   - `updateNavActive(pageName)` — toggle `.page-active` on nav links, handle Apps dropdown
+   - Handle `#card-wallet` from dropdown correctly as its own page
 
-### 6. Team — Two profile cards
-- **Stephanie** and **Nicolas** side by side
-- Gradient avatar placeholder, role, bio, social links (GitHub, LinkedIn, Portfolio)
-- All portfolio URLs are `#` placeholders for now
+2. **Navigation Events:**
+   - Click handlers on all `[data-page]` nav links and `.nav-page-link` CTA buttons
+   - `hashchange` listener for browser back/forward
+   - Brand logo click → `#home`
 
-### 7. Contact — Info + form
-- Left column: email (hello@eboxr.com), location info
-- Right column: glass card with contact form (name, email, subject, message)
-- Form is static (no backend) — placeholder submit with JS success feedback
+3. **Initial Load:**
+   - Read hash from URL, navigate to that page (or default `#home`)
 
-### 8. Footer — Three columns
-- Logo | Copyright 2026 | Social icons (GitHub, X, LinkedIn)
+4. **Mobile Nav Close** (kept, updated):
+   - Close Bootstrap collapse on any nav link or dropdown item click
 
-## Key CSS Classes
+**Edge cases:**
+- Invalid hash → redirect to `#home`
+- Same-page click → no-op (no re-animation)
+- Navigation lock during transition (prevent rapid clicks)
+- `prefers-reduced-motion` → instant page swaps, no animation
 
-| Class | Purpose |
-|-------|---------|
-| `.glass-card` | `backdrop-filter: blur(12px)`, semi-transparent bg, subtle border |
-| `.glass-nav` / `.glass-nav.scrolled` | Transparent → frosted navbar on scroll |
-| `.glass-dropdown` | Frosted dropdown menu matching nav |
-| `.glass-input` | Dark transparent form inputs with blue focus ring |
-| `.gradient-text` | Blue-to-cyan gradient via `background-clip: text` |
-| `.btn-cta` | Orange gradient button with hover glow |
-| `.animate-on-scroll` | `opacity: 0` + transform, animated via IntersectionObserver |
-| `.hero-orb` | Large blurred circles with float animation |
-| `.service-card::before` | Gradient top-border that scales in on hover |
-| `.avatar-placeholder` | Circular gradient container for team avatars |
-
-## JavaScript (main.js) — 5 modules
-
-1. **Navbar scroll** — add/remove `.scrolled` class at 50px threshold
-2. **ScrollSpy dropdown** — highlight Apps dropdown when any app section is active
-3. **Scroll animations** — `IntersectionObserver` adds `.animated` to `.animate-on-scroll` elements with configurable delays
-4. **Mobile nav close** — collapse hamburger menu on link click
-5. **Contact form** — client-side validation + placeholder success feedback
-
-## Color Palette
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--color-bg` | `#0a0e27` | Page background |
-| `--color-surface` | `rgba(15, 23, 42, 0.60)` | Glass card backgrounds |
-| `--color-border` | `rgba(255, 255, 255, 0.08)` | Glass card borders |
-| `--color-primary` | `#3b82f6` | Primary blue |
-| `--color-accent` | `#06b6d4` | Cyan accent |
-| `--color-cta` | `#f97316` | Orange CTA buttons |
-| `--color-cta-hover` | `#fb923c` | CTA hover state |
-| `--gradient-primary` | `linear-gradient(135deg, #3b82f6, #06b6d4)` | Blue-to-cyan gradient |
-| `--gradient-cta` | `linear-gradient(135deg, #f97316, #f59e0b)` | Orange-to-amber gradient |
-| `--color-text` | `#e2e8f0` | Body text |
-| `--color-text-muted` | `#94a3b8` | Secondary text |
-
-## CDN Dependencies
-
-```html
-<!-- Bootstrap 5.3.8 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous">
-
-<!-- Bootstrap Icons 1.13.1 -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-      rel="stylesheet">
-
-<!-- Google Fonts: Inter (400, 500, 600, 700) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet">
-
-<!-- Bootstrap 5.3.8 JS Bundle (includes Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-```
+---
 
 ## Implementation Order
 
-### Phase 1: Foundation
-- Create `index.html` with full HTML skeleton, CDN links, empty section shells
-- Create `css/style.css` with CSS variables, base styles, utility classes
-- Create `js/main.js` (empty scaffold)
-- Create `assets/images/` directory
+0. **Overwrite `plan.md`** with this new plan (replaces the old scroll-based plan)
+1. **CSS first:** Add `.page` system classes, modify navbar to always-frosted, add page-enter animations, remove scroll animation classes, remove contact form styles
+2. **HTML second:** Restructure sections into `.page` wrappers, update nav links, merge/move content, remove contact section
+3. **JS third:** Complete rewrite — hash router, navigation events, initial load, mobile nav close
+4. **Cleanup:** Remove dead CSS, update `prefers-reduced-motion`, verify responsive
 
-### Phase 2: Navigation + Hero
-- Build navbar HTML with glassmorphism and dropdown
-- Build hero section with animated gradient and orbs
-- Add navbar scroll JS and mobile close handler
-
-### Phase 3: Content Sections
-- About section (two-column + glass stats card)
-- Services section (three glass cards)
-- Apps section (Card Wallet showcase)
-- Team section (Stephanie + Nicolas profiles)
-- Contact section (info + glass form)
-- Footer
-
-### Phase 4: Animations + Polish
-- Add `data-animation` attributes to all elements
-- Add IntersectionObserver scroll animation JS
-- Add responsive media queries (mobile hero, hide orbs, reduce blur)
-- Add `prefers-reduced-motion` support
-- Add skip-nav link and focus-visible styles
-- Contact form validation JS
-
-## Accessibility
-
-- Semantic HTML (`<nav>`, `<main>`, `<section>`, `<footer>`)
-- `aria-label` on all icon-only links
-- `prefers-reduced-motion` disables all animations
-- WCAG AA contrast ratios maintained
-- Skip navigation link
-- Proper form labels
-- Keyboard-navigable
+---
 
 ## Verification
 
-1. Open `index.html` in browser — dark theme, correct fonts, Bootstrap loaded
-2. Scroll — navbar transitions, animations trigger, orbs float
-3. Resize to mobile — responsive grid, hamburger menu works
-4. Click all nav links — smooth scroll to correct sections
-5. Test with `prefers-reduced-motion: reduce` — no animations
-6. Test contact form — validation feedback works
-7. Cross-browser: Safari (`-webkit-backdrop-filter`), Firefox, Chrome
-
-## Future Enhancements (not in scope)
-
-- Form backend (Formspree/Netlify Forms)
-- Real portfolio URLs for Stephanie and Nicolas
-- App Store link and screenshots for Card Wallet
-- SVG favicon with gradient "e"
-- Open Graph meta tags
-- Additional app pages
+1. Open `index.html` — Home page loads by default, navbar is frosted
+2. Click each nav link — page transitions with fade+slide, correct content shows
+3. Click "About Us" CTA on Home → About page appears
+4. Click Apps > Card Wallet → Card Wallet page appears
+5. Browser back/forward buttons work correctly
+6. Direct URL `index.html#team` loads Team page
+7. Invalid hash `#contact` redirects to Home
+8. Mobile: hamburger menu works, closes on link click
+9. `prefers-reduced-motion`: instant page swaps, no animations
+10. Footer visible on every page
+11. All content preserved (hero, about text+stats, services, card wallet, team profiles)
