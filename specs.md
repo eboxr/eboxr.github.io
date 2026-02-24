@@ -671,7 +671,9 @@ Scroll animations only — see §JS Module 3. Staggered `data-delay`: 0ms, 100ms
 
 #### Accessibility
 
-- "Download on App Store" button: `aria-label` required (link contains icon + text, but label adds App Store context)
+- Screenshot placeholder `<i>`: `aria-hidden="true"` — descriptive text paragraph below it is sufficient for screen readers
+- Checklist `<i class="bi-check-circle-fill">` icons: `aria-hidden="true"` — list item text is sufficient
+- "Download on App Store" button: `aria-label` required (adds App Store context beyond visible text)
 - Each app has its own `id` for nav dropdown deep-linking
 - Future `<img>` screenshots must have descriptive `alt` text
 
