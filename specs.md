@@ -949,8 +949,10 @@ Scroll animations — see §JS Module 3. Staggered `data-delay`: info column 0ms
 
 #### Accessibility
 
-- `#contactSuccess` has `role="alert"` — announces to screen readers when revealed
+- All inputs must have associated `<label>` via matching `for`/`id` pairs (not placeholder-only)
+- Submit must be `<button type="submit">` — not `<a>` or `<div>`
 - `novalidate` on form — Bootstrap's `was-validated` + CSS `:invalid` drives error display
+- `#contactSuccess` has `role="alert"` — announces to screen readers when revealed
 
 #### Responsive Behavior
 
