@@ -131,7 +131,7 @@ body {
   background: rgba(15, 23, 42, 0.60);
 }
 
-.glass-input::placeholder {
+.form-control.glass-input::placeholder {
   color: var(--color-text-muted);
   opacity: 0.6;
 }
