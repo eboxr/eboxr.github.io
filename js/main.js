@@ -15,20 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ---- 2. ScrollSpy: Apps Dropdown ----
-  // Highlight the Apps dropdown toggle when any .app-section is in the viewport
   const appsDropdownToggle = document.querySelector('#navbarNav .dropdown-toggle');
   const appSections = document.querySelectorAll('.app-section');
 
-  if (appsDropdownToggle && appSections.length > 0) {
+  if (appsDropdownToggle) {
     const visibleSections = new Set();
 
     const appObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          visibleSections.add(entry.target);
-        } else {
-          visibleSections.delete(entry.target);
-        }
+        visibleSections[entry.isIntersecting ? 'add' : 'delete'](entry.target);
       });
       appsDropdownToggle.classList.toggle('active', visibleSections.size > 0);
     }, { threshold: 0.1 });
@@ -37,47 +32,32 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ---- 3. Scroll Animations ----
-  // Trigger .animated class on .animate-on-scroll elements when they enter the viewport
-  const animatedElements = document.querySelectorAll('.animate-on-scroll');
+  const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      if (el.dataset.delay) el.style.transitionDelay = `${el.dataset.delay}ms`;
+      el.classList.add('animated');
+      scrollObserver.unobserve(el);
+    });
+  }, { threshold: 0.1 });
 
-  if (animatedElements.length > 0) {
-    const scrollObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const delay = el.dataset.delay;
-          if (delay) {
-            el.style.transitionDelay = `${delay}ms`;
-          }
-          el.classList.add('animated');
-          scrollObserver.unobserve(el);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    animatedElements.forEach((el) => scrollObserver.observe(el));
-  }
+  document.querySelectorAll('.animate-on-scroll').forEach((el) => scrollObserver.observe(el));
 
   // ---- 4. Mobile Nav Close ----
-  // Collapse the hamburger menu when a nav link is clicked on mobile
   const navbarCollapse = document.getElementById('navbarNav');
 
   if (navbarCollapse && typeof bootstrap !== 'undefined') {
-    const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse, {
-      toggle: false,
-    });
+    const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse, { toggle: false });
 
     navbarCollapse.querySelectorAll('.nav-link').forEach((link) => {
       link.addEventListener('click', () => {
-        if (navbarCollapse.classList.contains('show')) {
-          bsCollapse.hide();
-        }
+        if (navbarCollapse.classList.contains('show')) bsCollapse.hide();
       });
     });
   }
 
   // ---- 5. Contact Form Handler ----
-  // Client-side validation with placeholder success feedback (no backend)
   const contactForm = document.getElementById('contact-form');
 
   if (contactForm) {
@@ -86,24 +66,18 @@ document.addEventListener('DOMContentLoaded', () => {
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      // Reset previous validation state
       contactForm.querySelectorAll('.form-control').forEach((field) => {
         field.classList.remove('is-invalid', 'is-valid');
       });
 
       let isValid = true;
 
-      // Validate all required fields
       contactForm.querySelectorAll('[required]').forEach((field) => {
-        if (!field.value.trim()) {
-          field.classList.add('is-invalid');
-          isValid = false;
-        } else {
-          field.classList.add('is-valid');
-        }
+        const filled = field.value.trim().length > 0;
+        field.classList.add(filled ? 'is-valid' : 'is-invalid');
+        if (!filled) isValid = false;
       });
 
-      // Validate email format
       const emailField = document.getElementById('email');
       if (emailField && emailField.value.trim() && !emailRegex.test(emailField.value.trim())) {
         emailField.classList.replace('is-valid', 'is-invalid');
@@ -112,7 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!isValid) return;
 
-      // Show success message (placeholder — no backend call)
+      // Show placeholder success message, then restore the form
+      const savedHTML = contactForm.innerHTML;
+
       contactForm.innerHTML = `
         <div class="text-center py-4" role="alert" aria-live="polite">
           <i class="bi bi-check-circle-fill gradient-text display-4 mb-3 d-block"></i>
@@ -121,9 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
 
-      // Reset form and restore after 3 seconds
       setTimeout(() => {
-        location.reload();
+        contactForm.innerHTML = savedHTML;
+        contactForm.reset();
       }, 3000);
     });
   }
