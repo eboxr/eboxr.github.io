@@ -150,6 +150,11 @@ body {
   transform: translateY(0);
 }
 
+/* ---- Programmatic Focus (screen-reader only, no visible ring) ---- */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
 /* ---- Virtual Page System ---- */
 .page {
   display: none;
