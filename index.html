@@ -34,7 +34,7 @@
   <!-- ======================== NAVIGATION ======================== -->
   <nav class="navbar navbar-expand-lg fixed-top glass-nav" id="navbar">
     <div class="container">
-      <a class="navbar-brand fw-bold fs-4" href="#">
+      <a class="navbar-brand fw-bold fs-4" href="#home" data-page="home">
         <span class="gradient-text">e</span>Boxr
       </a>
       <button class="navbar-toggler border-0" type="button"
@@ -46,23 +46,20 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto gap-1">
           <li class="nav-item">
-            <a class="nav-link" href="#about">About</a>
+            <a class="nav-link" href="#home" data-page="home">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#services">Services</a>
+            <a class="nav-link" href="#services" data-page="services">Services</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button"
                data-bs-toggle="dropdown" aria-expanded="false" id="appsDropdown">Apps</a>
             <ul class="dropdown-menu glass-dropdown">
-              <li><a class="dropdown-item" href="#card-wallet">Card Wallet</a></li>
+              <li><a class="dropdown-item" href="#card-wallet" data-page="card-wallet">Card Wallet</a></li>
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#team">Team</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contact">Contact</a>
+            <a class="nav-link" href="#team" data-page="team">Team</a>
           </li>
         </ul>
       </div>
@@ -71,24 +68,26 @@
 
   <main id="main">
 
-    <!-- ======================== HERO ======================== -->
-    <section class="hero-section" id="hero">
-      <div class="hero-bg"></div>
-      <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
-      <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
-      <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
-      <div class="container position-relative">
-        <div class="row justify-content-center text-center">
-          <div class="col-lg-8">
-            <h1 class="display-3 fw-bold mb-4">
-              We build apps that <span class="gradient-text">matter.</span>
-            </h1>
-            <p class="lead text-muted mb-5">
-              A small team crafting thoughtful iOS and web applications.
-            </p>
-            <div class="d-flex gap-3 justify-content-center flex-wrap">
-              <a href="#apps" class="btn btn-cta btn-lg">See Our Work</a>
-              <a href="#contact" class="btn btn-outline-light btn-lg">Get in Touch</a>
+    <!-- ======================== HOME ======================== -->
+    <section class="page page-active" id="home" data-page="home">
+      <div class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+        <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+        <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
+        <div class="container position-relative">
+          <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+              <h1 class="display-3 fw-bold mb-4">
+                We build apps that <span class="gradient-text">matter.</span>
+              </h1>
+              <p class="lead text-muted mb-5">
+                A small team crafting thoughtful iOS and web applications.
+              </p>
+              <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="#about" class="btn btn-cta btn-lg nav-page-link">About Us</a>
+                <a href="#team" class="btn btn-outline-light btn-lg nav-page-link">Meet the Team</a>
+              </div>
             </div>
           </div>
         </div>
@@ -96,10 +95,10 @@
     </section>
 
     <!-- ======================== ABOUT ======================== -->
-    <section class="py-5" id="about">
-      <div class="container">
+    <section class="page" id="about" data-page="about">
+      <div class="container py-5">
         <div class="row align-items-center g-5">
-          <div class="col-lg-6 animate-on-scroll">
+          <div class="col-lg-6 page-enter-animate">
             <h2 class="display-5 fw-bold mb-4">
               About <span class="gradient-text">eBoxr</span>
             </h2>
@@ -113,7 +112,7 @@
               web experiences, we build things we're proud of.
             </p>
           </div>
-          <div class="col-lg-6 animate-on-scroll" data-delay="200">
+          <div class="col-lg-6 page-enter-animate" data-delay="200">
             <div class="glass-card p-4">
               <div class="row text-center g-4">
                 <div class="col-6">
@@ -140,14 +139,14 @@
     </section>
 
     <!-- ======================== SERVICES ======================== -->
-    <section class="py-5" id="services">
-      <div class="container">
-        <div class="text-center mb-5 animate-on-scroll">
+    <section class="page" id="services" data-page="services">
+      <div class="container py-5">
+        <div class="text-center mb-5 page-enter-animate">
           <h2 class="display-5 fw-bold">What We <span class="gradient-text">Do</span></h2>
           <p class="text-muted mt-3">From concept to App Store — we handle it all.</p>
         </div>
         <div class="row g-4">
-          <div class="col-md-4 animate-on-scroll">
+          <div class="col-md-4 page-enter-animate">
             <div class="glass-card service-card p-4 text-center h-100">
               <i class="bi bi-phone display-4 gradient-text mb-3 d-block"></i>
               <h3 class="h5 fw-bold">iOS Development</h3>
@@ -157,7 +156,7 @@
               </p>
             </div>
           </div>
-          <div class="col-md-4 animate-on-scroll" data-delay="150">
+          <div class="col-md-4 page-enter-animate" data-delay="150">
             <div class="glass-card service-card p-4 text-center h-100">
               <i class="bi bi-globe display-4 gradient-text mb-3 d-block"></i>
               <h3 class="h5 fw-bold">Web Applications</h3>
@@ -167,7 +166,7 @@
               </p>
             </div>
           </div>
-          <div class="col-md-4 animate-on-scroll" data-delay="300">
+          <div class="col-md-4 page-enter-animate" data-delay="300">
             <div class="glass-card service-card p-4 text-center h-100">
               <i class="bi bi-palette display-4 gradient-text mb-3 d-block"></i>
               <h3 class="h5 fw-bold">UI/UX Design</h3>
@@ -181,16 +180,11 @@
       </div>
     </section>
 
-    <!-- ======================== APPS ======================== -->
-    <section class="py-5" id="apps">
-      <div class="container">
-        <div class="text-center mb-5 animate-on-scroll">
-          <h2 class="display-5 fw-bold">Our <span class="gradient-text">Apps</span></h2>
-        </div>
-
-        <!-- Card Wallet -->
-        <div class="row align-items-center g-5 app-section" id="card-wallet">
-          <div class="col-lg-6 animate-on-scroll">
+    <!-- ======================== CARD WALLET ======================== -->
+    <section class="page" id="card-wallet" data-page="card-wallet">
+      <div class="container py-5">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6 page-enter-animate">
             <div class="glass-card p-5 text-center">
               <div class="app-screenshot-placeholder">
                 <i class="bi bi-phone display-1 text-muted"></i>
@@ -198,7 +192,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-6 animate-on-scroll" data-delay="200">
+          <div class="col-lg-6 page-enter-animate" data-delay="200">
             <span class="badge rounded-pill bg-primary mb-3 fs-6">
               <i class="bi bi-apple me-1"></i> iOS
             </span>
@@ -230,20 +224,19 @@
             </a>
           </div>
         </div>
-
       </div>
     </section>
 
     <!-- ======================== TEAM ======================== -->
-    <section class="py-5" id="team">
-      <div class="container">
-        <div class="text-center mb-5 animate-on-scroll">
+    <section class="page" id="team" data-page="team">
+      <div class="container py-5">
+        <div class="text-center mb-5 page-enter-animate">
           <h2 class="display-5 fw-bold">Meet the <span class="gradient-text">Team</span></h2>
           <p class="text-muted mt-3">The humans behind the code.</p>
         </div>
         <div class="row g-4 justify-content-center">
           <!-- Stephanie -->
-          <div class="col-md-6 col-lg-5 animate-on-scroll">
+          <div class="col-md-6 col-lg-5 page-enter-animate">
             <div class="glass-card p-4 text-center">
               <div class="avatar-placeholder mx-auto mb-3">
                 <i class="bi bi-person-fill display-4"></i>
@@ -269,7 +262,7 @@
             </div>
           </div>
           <!-- Nicolas -->
-          <div class="col-md-6 col-lg-5 animate-on-scroll" data-delay="200">
+          <div class="col-md-6 col-lg-5 page-enter-animate" data-delay="200">
             <div class="glass-card p-4 text-center">
               <div class="avatar-placeholder mx-auto mb-3">
                 <i class="bi bi-person-fill display-4"></i>
@@ -291,71 +284,6 @@
                 <a href="#" class="social-link" aria-label="Nicolas's Portfolio">
                   <i class="bi bi-globe"></i>
                 </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======================== CONTACT ======================== -->
-    <section class="py-5" id="contact">
-      <div class="container">
-        <div class="row g-5">
-          <div class="col-lg-5 animate-on-scroll">
-            <h2 class="display-5 fw-bold mb-4">
-              Get in <span class="gradient-text">Touch</span>
-            </h2>
-            <p class="text-muted mb-4">
-              Have a project in mind? We'd love to hear from you.
-              Drop us a message and we'll get back to you as soon as we can.
-            </p>
-            <div class="mb-3">
-              <i class="bi bi-envelope gradient-text me-2"></i>
-              <a href="mailto:hello@eboxr.com" class="text-muted text-decoration-none">
-                hello@eboxr.com
-              </a>
-            </div>
-            <div class="mb-3">
-              <i class="bi bi-geo-alt gradient-text me-2"></i>
-              <span class="text-muted">Remote — Worldwide</span>
-            </div>
-          </div>
-          <div class="col-lg-7 animate-on-scroll" data-delay="200">
-            <div class="glass-card p-4">
-              <form id="contact-form" novalidate>
-                <div class="mb-3">
-                  <label for="name" class="form-label">Name</label>
-                  <input type="text" class="form-control glass-input" id="name"
-                         placeholder="Your name" required>
-                  <div class="invalid-feedback">Please enter your name.</div>
-                </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control glass-input" id="email"
-                         placeholder="you@example.com" required>
-                  <div class="invalid-feedback">Please enter a valid email address.</div>
-                </div>
-                <div class="mb-3">
-                  <label for="subject" class="form-label">Subject</label>
-                  <input type="text" class="form-control glass-input" id="subject"
-                         placeholder="What's this about?" required>
-                  <div class="invalid-feedback">Please enter a subject.</div>
-                </div>
-                <div class="mb-3">
-                  <label for="message" class="form-label">Message</label>
-                  <textarea class="form-control glass-input" id="message" rows="5"
-                            placeholder="Tell us about your project..." required></textarea>
-                  <div class="invalid-feedback">Please enter your message.</div>
-                </div>
-                <button type="submit" class="btn btn-cta w-100">
-                  Send Message <i class="bi bi-arrow-right ms-2"></i>
-                </button>
-              </form>
-              <div id="form-success" class="text-center py-5 d-none">
-                <i class="bi bi-check-circle display-3 gradient-text"></i>
-                <h3 class="h5 fw-bold mt-3">Message Sent!</h3>
-                <p class="text-muted">Thanks for reaching out. We'll get back to you soon.</p>
               </div>
             </div>
           </div>
