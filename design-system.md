@@ -142,6 +142,9 @@ All tokens are declared on `:root` in `css/style.css`.
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
   --shadow-glow: 0 8px 32px rgba(59, 130, 246, 0.15);  /* Blue glow — card hover */
   --shadow-cta:  0 4px 24px rgba(249, 115, 22, 0.40);  /* Orange glow — CTA hover */
+
+  /* Glass blur — shared by all frosted-glass components */
+  --glass-blur: 12px;
 }
 ```
 
@@ -154,8 +157,8 @@ All tokens are declared on `:root` in `css/style.css`.
 ```css
 .glass-card {
   background:               var(--color-surface);
-  backdrop-filter:          blur(12px);
-  -webkit-backdrop-filter:  blur(12px);          /* Safari */
+  backdrop-filter:          blur(var(--glass-blur));
+  -webkit-backdrop-filter:  blur(var(--glass-blur));  /* Safari */
   border:                   1px solid var(--color-border);
   border-radius:            var(--radius-lg);    /* 16px */
   padding:                  var(--card-p);       /* 24px */
@@ -184,9 +187,9 @@ All tokens are declared on `:root` in `css/style.css`.
 }
 
 .glass-nav.scrolled {
-  background:              rgba(10, 14, 39, 0.85);
-  backdrop-filter:         blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background:              rgba(10, 14, 39, 0.85); /* intentionally more opaque than --color-surface */
+  backdrop-filter:         blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border-bottom:           1px solid var(--color-border);
 }
 ```
@@ -199,9 +202,9 @@ All tokens are declared on `:root` in `css/style.css`.
 
 ```css
 .glass-dropdown {
-  background:              rgba(10, 14, 39, 0.95);
-  backdrop-filter:         blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background:              rgba(10, 14, 39, 0.95); /* intentionally more opaque than --color-surface */
+  backdrop-filter:         blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   border:                  1px solid var(--color-border);
   border-radius:           var(--radius-md);     /* 8px */
   margin-top:              0.5rem;
@@ -362,9 +365,8 @@ Content: initials — `SB` for Stephanie, `NR` for Nicolas.
 /* Orb instances */
 .hero-orb-1 {
   width:  400px; height: 400px;
-  background:     var(--color-primary);  /* #3b82f6 blue */
+  background: var(--color-primary);  /* #3b82f6 blue */
   top:    -100px; left: -100px;
-  animation-delay: 0s;
 }
 .hero-orb-2 {
   width:  300px; height: 300px;
@@ -533,9 +535,9 @@ height: 72px | links: font-weight 500 | logo: gradient-text
 │  ^gradient "e"  ^hamburger   │
 └──────────────────────────────┘
 
-[Collapsed — Bootstrap collapse]:
+[Expanded — Bootstrap collapse]:
 ┌──────────────────────────────┐
-│  eBoxr          [bi-list]    │
+│  eBoxr          [bi-x-lg]    │
 ├──────────────────────────────┤
 │  About                       │
 │  Services                    │
@@ -788,10 +790,8 @@ Footer icons: aria-label on each link, font-size 1.25rem.
     display: none;
   }
 
-  .glass-card,
-  .glass-nav.scrolled {
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter:         blur(8px);
+  :root {
+    --glass-blur: 8px; /* reduce blur on mobile for performance */
   }
 }
 ```
@@ -807,12 +807,11 @@ All icons use `bi-*` classes. No raw Unicode characters or emoji in HTML.
 | Icon class | Section | Usage | aria treatment |
 |---|---|---|---|
 | `bi-phone` | Services | iOS Development card | `aria-hidden="true"` (decorative) |
-| `bi-globe` | Services | Web Applications card | `aria-hidden="true"` |
+| `bi-globe` | Services, Team | Web Applications card; personal portfolio link | `aria-hidden="true"` (Services) / `aria-label="Portfolio"` on `<a>` (Team) |
 | `bi-palette` | Services | UI/UX Design card | `aria-hidden="true"` |
 | `bi-github` | Team, Footer | GitHub profile link | `aria-label="GitHub"` on `<a>` |
 | `bi-linkedin` | Team, Footer | LinkedIn profile link | `aria-label="LinkedIn"` on `<a>` |
 | `bi-twitter-x` | Footer | X (Twitter) profile link | `aria-label="X (Twitter)"` on `<a>` |
-| `bi-globe` | Team | Personal portfolio link | `aria-label="Portfolio"` on `<a>` |
 | `bi-envelope` | Contact | Email address | `aria-hidden="true"` |
 | `bi-geo-alt` | Contact | Location | `aria-hidden="true"` |
 | `bi-check-circle` | Apps | Feature list items | `aria-hidden="true"` |
