@@ -2,7 +2,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  const VALID_PAGES = ['home', 'about', 'services', 'card-wallet', 'team'];
+  const VALID_PAGES = ['home', 'about', 'card-wallet', 'team'];
+  const PAGE_ALIASES = { services: 'about' };
   const TRANSITION_DURATION = 300; // ms — matches pageExit animation
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getPageFromHash() {
     const hash = window.location.hash.replace('#', '');
+    if (PAGE_ALIASES[hash]) return PAGE_ALIASES[hash];
     return VALID_PAGES.includes(hash) ? hash : 'home';
   }
 
