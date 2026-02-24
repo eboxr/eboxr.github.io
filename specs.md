@@ -799,6 +799,8 @@ Scroll animations only — see §JS Module 3. Staggered `data-delay`: Stephanie 
 
 #### Accessibility
 
+- Avatar `<div class="avatar-placeholder">`: `aria-hidden="true"` — contains initials text that would be read redundantly without it
+- Social `<i>` icons: `aria-hidden="true"` — link's `aria-label` provides all necessary context
 - Social links: `aria-label` pattern is `"[Name]'s [Platform] profile"` (e.g., `"Stephanie's GitHub profile"`)
 - `prefers-reduced-motion`: disable `.team-card` hover `translateY` transition
 
