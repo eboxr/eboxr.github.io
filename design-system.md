@@ -162,6 +162,7 @@ All tokens are declared on `:root` in `css/style.css`.
   border:                   1px solid var(--color-border);
   border-radius:            var(--radius-lg);    /* 16px */
   padding:                  var(--card-p);       /* 24px */
+  box-shadow:               var(--shadow-card);
   transition:               transform var(--transition-base),
                             box-shadow var(--transition-base);
 }
@@ -246,8 +247,8 @@ All tokens are declared on `:root` in `css/style.css`.
 .glass-input:focus {
   outline:       none;
   border-color:  var(--color-primary);
-  box-shadow:    0 0 0 0.2rem rgba(59, 130, 246, 0.25);
-  background:    rgba(15, 23, 42, 0.60);
+  box-shadow:    0 0 0 0.2rem rgba(59, 130, 246, 0.25); /* --color-primary at 25% alpha */
+  background:    rgba(15, 23, 42, 0.60);                /* matches --color-surface opacity */
 }
 ```
 
@@ -738,7 +739,7 @@ Social links: `.social-link` with `aria-label` on each `<a>` tag.
 ┌─────────────────────────────────────────────────────────────┐
 │  [semi-transparent bg, border-top: 1px solid --color-border]│
 │                                                             │
-│  eBoxr          (C) 2026 eBoxr.         [bi-github]         │
+│  eBoxr          © 2026 eBoxr.           [bi-github]         │
 │  ^gradient "e"  All rights reserved.   [bi-twitter-x]      │
 │                                         [bi-linkedin]       │
 │  col-md-4       col-md-4                col-md-4            │
@@ -779,7 +780,7 @@ Footer icons: aria-label on each link, font-size 1.25rem.
 ### 5.3 Mobile (<768px) — Stacked Layout
 
 - Hero orbs: `display: none` (performance and noise reduction)
-- Backdrop blur: reduced from `blur(12px)` to `blur(8px)`
+- Backdrop blur: `--glass-blur` overridden to `8px` (from default `12px`) via `:root` inside media query
 - All grids: single column, full-width
 - Team cards: stacked vertically
 - Footer: centered, icons on separate row
@@ -814,10 +815,10 @@ All icons use `bi-*` classes. No raw Unicode characters or emoji in HTML.
 | `bi-twitter-x` | Footer | X (Twitter) profile link | `aria-label="X (Twitter)"` on `<a>` |
 | `bi-envelope` | Contact | Email address | `aria-hidden="true"` |
 | `bi-geo-alt` | Contact | Location | `aria-hidden="true"` |
-| `bi-check-circle` | Apps | Feature list items | `aria-hidden="true"` |
-| `bi-check-circle` | Contact | Form success state | `aria-hidden="true"` |
+| `bi-check-circle` | Apps, Contact | Feature list items; form success state | `aria-hidden="true"` |
 | `bi-arrow-right` | Buttons | CTA navigation affordance | `aria-hidden="true"` |
-| `bi-list` | Navbar | Mobile hamburger toggle | Covered by Bootstrap's `aria-label` |
+| `bi-list` | Navbar | Mobile hamburger toggle (closed state) | Covered by Bootstrap's `aria-label` |
+| `bi-x-lg` | Navbar | Mobile hamburger toggle (open state) | Covered by Bootstrap's `aria-label` |
 | `bi-apple` | Apps | iOS badge label | `aria-hidden="true"` |
 
 ### 6.2 Icon Usage Rules
