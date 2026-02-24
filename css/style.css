@@ -15,6 +15,7 @@
   --gradient-cta: linear-gradient(135deg, #f97316, #f59e0b);
   --color-text: #e2e8f0;
   --color-text-muted: #94a3b8;
+  --navbar-height: 72px;
 }
 
 /* ---- Base ---- */
@@ -68,11 +69,7 @@ body {
 }
 
 .glass-nav .nav-link:hover,
-.glass-nav .nav-link.active {
-  color: var(--color-text);
-}
-
-/* Active nav link indicator */
+.glass-nav .nav-link.active,
 .glass-nav .nav-link.page-active {
   color: var(--color-text);
 }
@@ -156,8 +153,8 @@ body {
 /* ---- Virtual Page System ---- */
 .page {
   display: none;
-  min-height: calc(100vh - 72px);
-  padding-top: 72px;
+  min-height: calc(100vh - var(--navbar-height));
+  padding-top: var(--navbar-height);
 }
 
 .page.page-active {
@@ -196,7 +193,7 @@ body {
 
 /* ---- Hero Section ---- */
 .hero-section {
-  min-height: calc(100vh - 72px);
+  min-height: calc(100vh - var(--navbar-height));
   display: flex;
   align-items: center;
   position: relative;
@@ -323,13 +320,8 @@ body {
     border: 1px solid var(--color-border);
   }
 
-  .page {
-    padding-top: 56px;
-    min-height: calc(100vh - 56px);
-  }
-
-  .hero-section {
-    min-height: calc(100vh - 56px);
+  :root {
+    --navbar-height: 56px;
   }
 
   .glass-nav .nav-link.page-active::after {

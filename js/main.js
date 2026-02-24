@@ -9,42 +9,47 @@ document.addEventListener('DOMContentLoaded', () => {
   let isNavigating = false;
   let currentPage = null;
 
-  // ---- 1. Hash Router ----
+  // ---- Helpers ----
+
+  function getPage(name) {
+    return document.querySelector(`.page[data-page="${name}"]`);
+  }
 
   function getPageFromHash() {
     const hash = window.location.hash.replace('#', '');
     return VALID_PAGES.includes(hash) ? hash : 'home';
   }
 
+  function activatePage(page, pageName) {
+    page.classList.add('page-active');
+    currentPage = pageName;
+    updateNavActive(pageName);
+    showPageElements(page);
+    window.scrollTo(0, 0);
+  }
+
+  // ---- 1. Hash Router ----
+
   function navigateTo(pageName) {
     if (isNavigating || pageName === currentPage) return;
 
-    const target = document.querySelector(`.page[data-page="${pageName}"]`);
+    const target = getPage(pageName);
     if (!target) return;
 
-    const current = currentPage
-      ? document.querySelector(`.page[data-page="${currentPage}"]`)
-      : null;
+    const current = currentPage ? getPage(currentPage) : null;
 
-    // Update hash without triggering hashchange handler
     if (window.location.hash !== `#${pageName}`) {
       history.pushState(null, '', `#${pageName}`);
     }
 
     if (reducedMotion || !current) {
-      // Instant swap
       if (current) {
         current.classList.remove('page-active', 'page-entering');
       }
-      target.classList.add('page-active');
-      currentPage = pageName;
-      updateNavActive(pageName);
-      showPageElements(target);
-      window.scrollTo(0, 0);
+      activatePage(target, pageName);
       return;
     }
 
-    // Animated transition
     isNavigating = true;
     current.classList.add('page-exiting');
 
@@ -52,13 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
       current.classList.remove('page-active', 'page-exiting', 'page-entering');
       resetPageElements(current);
 
-      target.classList.add('page-active', 'page-entering');
-      currentPage = pageName;
-      updateNavActive(pageName);
-      showPageElements(target);
-      window.scrollTo(0, 0);
+      target.classList.add('page-entering');
+      activatePage(target, pageName);
 
-      // Clean up entering class after animation completes
       const onEnd = () => {
         target.classList.remove('page-entering');
         isNavigating = false;
@@ -69,8 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showPageElements(page) {
-    const elements = page.querySelectorAll('.page-enter-animate');
-    elements.forEach((el, i) => {
+    page.querySelectorAll('.page-enter-animate').forEach((el, i) => {
       const delay = parseInt(el.dataset.delay, 10) || (i * 100);
       if (reducedMotion) {
         el.classList.add('animated');
@@ -91,45 +91,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateNavActive(pageName) {
-    // Remove active from all nav links
-    document.querySelectorAll('[data-page]').forEach((link) => {
-      if (link.classList.contains('nav-link') || link.classList.contains('dropdown-item')) {
-        link.classList.remove('page-active');
-      }
+    document.querySelectorAll('.nav-link[data-page], .dropdown-item[data-page]').forEach((link) => {
+      link.classList.remove('page-active');
     });
 
-    // Set active on matching nav link
     const activeLink = document.querySelector(`.nav-link[data-page="${pageName}"]`);
-    if (activeLink) {
-      activeLink.classList.add('page-active');
-    }
+    if (activeLink) activeLink.classList.add('page-active');
 
-    // Handle Apps dropdown: highlight toggle when a dropdown page is active
     const appsDropdown = document.getElementById('appsDropdown');
     if (appsDropdown) {
       const dropdownItem = document.querySelector(`.dropdown-item[data-page="${pageName}"]`);
       appsDropdown.classList.toggle('page-active', !!dropdownItem);
-      if (dropdownItem) {
-        dropdownItem.classList.add('page-active');
-      }
+      if (dropdownItem) dropdownItem.classList.add('page-active');
     }
   }
 
   // ---- 2. Navigation Events ----
 
-  // Nav links and dropdown items with data-page
-  document.querySelectorAll('[data-page]').forEach((link) => {
-    // Skip page sections (only handle nav elements)
-    if (link.tagName === 'SECTION') return;
-
+  document.querySelectorAll('.nav-link[data-page], .dropdown-item[data-page], .navbar-brand[data-page]').forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
-      const page = link.dataset.page;
-      if (page) navigateTo(page);
+      navigateTo(link.dataset.page);
     });
   });
 
-  // CTA buttons with nav-page-link class
   document.querySelectorAll('.nav-page-link').forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -138,31 +123,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Browser back/forward
-  window.addEventListener('hashchange', () => {
-    const page = getPageFromHash();
-    navigateTo(page);
-  });
+  window.addEventListener('hashchange', () => navigateTo(getPageFromHash()));
 
   // ---- 3. Initial Load ----
 
-  const initialPage = getPageFromHash();
-
-  // Ensure hash is set
   if (!window.location.hash || !VALID_PAGES.includes(window.location.hash.replace('#', ''))) {
     history.replaceState(null, '', '#home');
   }
 
-  // Remove default page-active from HTML (in case hash differs)
   document.querySelectorAll('.page').forEach((p) => p.classList.remove('page-active'));
 
-  const initialTarget = document.querySelector(`.page[data-page="${initialPage}"]`);
-  if (initialTarget) {
-    initialTarget.classList.add('page-active');
-    currentPage = initialPage;
-    updateNavActive(initialPage);
-    showPageElements(initialTarget);
-  }
+  const initialPage = getPageFromHash();
+  const initialTarget = getPage(initialPage);
+  if (initialTarget) activatePage(initialTarget, initialPage);
 
   // ---- 4. Mobile Nav Close ----
 
