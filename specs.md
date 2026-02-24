@@ -116,6 +116,21 @@ All custom properties are declared on `:root` in `css/style.css`.
 
 ---
 
+## Global CSS Utilities
+
+Classes used across three or more sections. Defined **once** here; section CSS tables only list section-specific additions.
+
+| Class | CSS Definition | Used In |
+|-------|---------------|---------|
+| `.glass-card` | `background: var(--color-surface)`, `backdrop-filter: blur(12px)`, `-webkit-backdrop-filter: blur(12px)`, `border: 1px solid var(--color-border)`, `border-radius: 1rem` | About, Services, Apps, Team, Contact |
+| `.gradient-text` | `background: var(--gradient-primary)`, `-webkit-background-clip: text`, `background-clip: text`, `color: transparent` | Nav logo, Hero, About, Services headings, Team section heading |
+| `.section-padding` | `padding: 100px 0` (desktop); `padding: 60px 0` at `< md` | About, Services, Apps, Team, Contact |
+| `.animate-on-scroll` | `opacity: 0`, `transform: translateY(30px)`, `transition: opacity 0.6s ease, transform 0.6s ease` | All sections |
+| `.animate-on-scroll.animated` | `opacity: 1`, `transform: translateY(0)` | Applied by JS Module 3 |
+| `.btn-cta` | `background: var(--gradient-cta)`, `border: none`, `color: #fff`, `font-weight: 600`; hover: `box-shadow: 0 0 20px rgba(249,115,22,0.5)` | Hero, Apps, Contact |
+
+---
+
 ## Global Accessibility Requirements
 
 These apply to the entire page and every section:
@@ -307,6 +322,8 @@ These apply to the entire page and every section:
 
 #### CSS Classes Required
 
+> Global utilities (`.animate-on-scroll`, `.btn-cta`, `.gradient-text`) defined in §Global CSS Utilities.
+
 | Class | Purpose |
 |-------|---------|
 | `.hero-section` | `min-height: 100vh`, `position: relative`, `overflow: hidden`, animated gradient background via `@keyframes gradientShift` |
@@ -314,9 +331,6 @@ These apply to the entire page and every section:
 | `.hero-orb--1` | Blue (`rgba(59,130,246,0.3)`), top-left, `width: 600px`, `height: 600px` |
 | `.hero-orb--2` | Cyan (`rgba(6,182,212,0.2)`), bottom-right, `width: 400px`, `height: 400px` |
 | `.hero-orb--3` | Orange (`rgba(249,115,22,0.15)`), center-right, `width: 300px`, `height: 300px` |
-| `.btn-cta` | `background: var(--gradient-cta)`, `border: none`, `color: #fff`, `font-weight: 600`, hover: `box-shadow: 0 0 20px rgba(249,115,22,0.5)` |
-| `.animate-on-scroll` | `opacity: 0`, `transform: translateY(30px)`, `transition: opacity 0.6s ease, transform 0.6s ease` |
-| `.animate-on-scroll.animated` | `opacity: 1`, `transform: translateY(0)` |
 
 **Keyframes:**
 - `@keyframes gradientShift` — shifts `background-position` on the hero animated gradient
@@ -324,9 +338,7 @@ These apply to the entire page and every section:
 
 #### JavaScript Behavior
 
-**Module: Scroll animations** (see §JS Module 3)
-- Hero `.animate-on-scroll` elements animate on initial page load (already in viewport)
-- `data-delay` attribute (ms) applied as `transition-delay` before adding `.animated`
+Scroll animations — see §JS Module 3. Hero elements are in-viewport on load; `data-delay` (0ms, 100ms, 200ms) staggers the three elements.
 
 #### Accessibility
 
@@ -419,22 +431,15 @@ These apply to the entire page and every section:
 
 #### CSS Classes Required
 
-| Class | Purpose |
-|-------|---------|
-| `.section-padding` | `padding: 100px 0` (desktop); `padding: 60px 0` (mobile `< md`) |
-| `.glass-card` | `background: var(--color-surface)`, `backdrop-filter: blur(12px)`, `-webkit-backdrop-filter: blur(12px)`, `border: 1px solid var(--color-border)`, `border-radius: 1rem` |
-| `.gradient-text` | Applied to stat values and section heading highlight |
-| `.animate-on-scroll` | Fade + translate animation triggered by IntersectionObserver |
+> All classes for this section are global utilities — see §Global CSS Utilities.
 
 #### JavaScript Behavior
 
-**Module: Scroll animations** — both columns have `.animate-on-scroll` with staggered `data-delay` (0ms, 200ms).
+Scroll animations only — see §JS Module 3. Staggered `data-delay`: text column 0ms, stats card 200ms.
 
 #### Accessibility
 
-- Heading hierarchy: `<h2>` (only one `<h1>` exists in hero)
-- Stats are plain text — no special ARIA needed
-- Section has a visible heading describing the content
+- Stats values are plain `<div>` text — no special ARIA needed beyond visible heading
 
 #### Responsive Behavior
 
@@ -522,23 +527,21 @@ These apply to the entire page and every section:
 
 #### CSS Classes Required
 
+> `.glass-card`, `.animate-on-scroll`, `.section-padding` defined in §Global CSS Utilities.
+
 | Class | Purpose |
 |-------|---------|
-| `.service-card` | Extends `.glass-card`; adds `position: relative`, `overflow: hidden`, `transition: transform 0.3s ease`; hover: `transform: translateY(-4px)` |
+| `.service-card` | Extends `.glass-card`; `position: relative`, `overflow: hidden`, `transition: transform 0.3s ease`; hover: `transform: translateY(-4px)` |
 | `.service-card::before` | `content: ''`, `position: absolute`, `top: 0`, `left: 0`, `right: 0`, `height: 3px`, `background: var(--gradient-primary)`, `transform: scaleX(0)`, `transition: transform 0.3s ease`, `transform-origin: left` |
 | `.service-card:hover::before` | `transform: scaleX(1)` — gradient top-border slides in from left |
 
 #### JavaScript Behavior
 
-**Module: Scroll animations** — each column has `.animate-on-scroll` with staggered `data-delay` (0, 100, 200ms).
-
-No other JS — hover effect is pure CSS.
+Scroll animations only — see §JS Module 3. Staggered `data-delay`: 0ms, 100ms, 200ms per card. Hover effect is pure CSS.
 
 #### Accessibility
 
-- Service icons are `aria-hidden="true"` — decorative
-- Each card has an `<h3>` heading
-- `prefers-reduced-motion`: disable `::before` transition and card lift transition
+- `prefers-reduced-motion`: disable `.service-card::before` transition and `translateY` hover lift
 
 #### Responsive Behavior
 
@@ -646,31 +649,30 @@ No other JS — hover effect is pure CSS.
 
 #### CSS Classes Required
 
+> `.glass-card`, `.animate-on-scroll`, `.btn-cta`, `.section-padding` defined in §Global CSS Utilities.
+
 | Class | Purpose |
 |-------|---------|
 | `.app-screenshot-frame` | Extends `.glass-card`; `border-radius: 1.5rem` |
 | `.app-screenshot-placeholder` | `min-height: 300px`, `display: flex`, `flex-direction: column`, `align-items: center`, `justify-content: center` |
 
-**Future app layout note:** Add `class="flex-lg-row-reverse"` to the `.row` of the second app to alternate image/text sides on desktop.
+**Future apps:** Add `flex-lg-row-reverse` to the `.row` to alternate image/text sides on desktop.
 
-**ScrollSpy note:** `#card-wallet` must also carry a `data-app-section` attribute for JS Module 2 detection:
+**ScrollSpy:** `#card-wallet` row must have `data-app-section` attribute for JS Module 2:
 ```html
 <div id="card-wallet" data-app-section class="row ...">
 ```
 
 #### JavaScript Behavior
 
-**Module: ScrollSpy dropdown** — `[data-app-section]` elements are observed; when in viewport, `active` class added to `#appsDropdown`.
-
-**Module: Scroll animations** — `.animate-on-scroll` on the app row.
+- **ScrollSpy dropdown** — see §JS Module 2. `[data-app-section]` observed; `active` toggled on `#appsDropdown`
+- **Scroll animations** — see §JS Module 3
 
 #### Accessibility
 
-- Screenshot placeholder: decorative `<i>` is `aria-hidden="true"`; descriptive text below it is sufficient
-- Checklist icons: `aria-hidden="true"` — text content is sufficient
-- "Download on App Store": `aria-label` provides full context
-- Each app has its own `id` for deep linking from navbar dropdown
-- Future real `<img>` must include descriptive `alt` text
+- "Download on App Store" button: `aria-label` required (link contains icon + text, but label adds App Store context)
+- Each app has its own `id` for nav dropdown deep-linking
+- Future `<img>` screenshots must have descriptive `alt` text
 
 #### Responsive Behavior
 
@@ -779,24 +781,23 @@ No other JS — hover effect is pure CSS.
 
 #### CSS Classes Required
 
+> `.glass-card`, `.animate-on-scroll`, `.section-padding` defined in §Global CSS Utilities.
+
 | Class | Purpose |
 |-------|---------|
 | `.team-card` | Extends `.glass-card`; hover: `transform: translateY(-6px)`, `transition: transform 0.3s ease` |
 | `.avatar-placeholder` | `width: 80px`, `height: 80px`, `border-radius: 50%`, `background: var(--gradient-primary)`, `display: flex`, `align-items: center`, `justify-content: center` |
 | `.avatar-initials` | `color: #fff`, `font-size: 1.75rem`, `font-weight: 700` |
-| `.team-social-link` | `color: var(--color-text-muted)`, `font-size: 1.25rem`, hover: `color: var(--color-primary)`, `transition: color 0.2s ease` |
+| `.team-social-link` | `color: var(--color-text-muted)`, `font-size: 1.25rem`; hover: `color: var(--color-primary)`, `transition: color 0.2s ease` |
 
 #### JavaScript Behavior
 
-**Module: Scroll animations** — staggered `.animate-on-scroll` on each card column (0ms, 150ms).
+Scroll animations only — see §JS Module 3. Staggered `data-delay`: Stephanie 0ms, Nicolas 150ms.
 
 #### Accessibility
 
-- Avatar placeholders: `aria-hidden="true"` (decorative)
-- Social links: `aria-label` per person per platform (e.g., `"Stephanie's GitHub profile"`)
-- Social icons: `aria-hidden="true"`
-- All social URLs are `href="#"` placeholders
-- `prefers-reduced-motion`: disable hover `translateY` transition
+- Social links: `aria-label` pattern is `"[Name]'s [Platform] profile"` (e.g., `"Stephanie's GitHub profile"`)
+- `prefers-reduced-motion`: disable `.team-card` hover `translateY` transition
 
 #### Responsive Behavior
 
@@ -923,6 +924,8 @@ No other JS — hover effect is pure CSS.
 
 #### CSS Classes Required
 
+> `.glass-card`, `.animate-on-scroll`, `.btn-cta`, `.section-padding` defined in §Global CSS Utilities.
+
 | Class | Purpose |
 |-------|---------|
 | `.glass-input` | `background: rgba(255,255,255,0.05)`, `border: 1px solid var(--color-border)`, `color: var(--color-text)`, `border-radius: 0.5rem`; focus: `border-color: var(--color-primary)`, `box-shadow: 0 0 0 3px rgba(59,130,246,0.25)`, `outline: none` |
@@ -930,32 +933,19 @@ No other JS — hover effect is pure CSS.
 
 #### JavaScript Behavior
 
-**Module: Contact form** (see §JS Module 5)
+Contact form — see §JS Module 5. Flow:
+1. `submit` → `preventDefault()` → add `was-validated`
+2. `checkValidity()` fails → stop (Bootstrap shows `.invalid-feedback` via CSS)
+3. Valid → disable button ("Sending…") → 800ms delay → show `#contactSuccess` → `reset()` → re-enable
 
-1. Attach `submit` listener to `#contactForm`
-2. `event.preventDefault()`
-3. Add `was-validated` class to form
-4. Check `form.checkValidity()`:
-   - **Invalid**: stop; Bootstrap `.invalid-feedback` displays via `was-validated` + `:invalid`
-   - **Valid**:
-     1. Disable submit button; set text to "Sending…"
-     2. Wait 800ms (simulated async)
-     3. Remove `d-none` from `#contactSuccess`
-     4. `form.reset()`, remove `was-validated`, re-enable button, restore "Send Message"
+**Field validation:** `name` required, `email` required + type validation, `subject` optional, `message` required.
 
-**Validation rules:**
-- `name`: required
-- `email`: required, type="email" (browser validates format)
-- `subject`: optional
-- `message`: required
+Scroll animations — see §JS Module 3. Staggered `data-delay`: info column 0ms, form column 100ms.
 
 #### Accessibility
 
-- All inputs have associated `<label>` via `for`/`id` pairs
-- `novalidate` on form — Bootstrap handles validation UI
-- `#contactSuccess` has `role="alert"` for screen reader announcement
-- Submit is `<button type="submit">` (not `<a>` or `<div>`)
-- Placeholders do not replace visible labels
+- `#contactSuccess` has `role="alert"` — announces to screen readers when revealed
+- `novalidate` on form — Bootstrap's `was-validated` + CSS `:invalid` drives error display
 
 #### Responsive Behavior
 
@@ -1033,14 +1023,12 @@ No other JS — hover effect is pure CSS.
 
 #### JavaScript Behavior
 
-None. Footer is fully static.
+None.
 
 #### Accessibility
 
-- `<footer>` has implicit `contentinfo` landmark role (no explicit `role` needed)
-- Social icon links: `aria-label` with platform name (e.g., `"eBoxr on GitHub"`)
-- All social icons: `aria-hidden="true"`
-- Logo link returns user to `#hero`
+- `<footer>` has implicit `contentinfo` landmark — no explicit `role` needed
+- Social links: `aria-label` pattern is `"eBoxr on [Platform]"` (e.g., `"eBoxr on GitHub"`)
 
 #### Responsive Behavior
 
