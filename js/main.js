@@ -5,27 +5,39 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---- 1. Navbar Scroll Effect ----
   const navbar = document.getElementById('navbar');
 
-  const handleNavbarScroll = () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-  };
+  if (navbar) {
+    const handleNavbarScroll = () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    };
 
-  window.addEventListener('scroll', handleNavbarScroll, { passive: true });
-  handleNavbarScroll();
+    window.addEventListener('scroll', handleNavbarScroll, { passive: true });
+    handleNavbarScroll();
+  }
 
   // ---- 2. ScrollSpy: Apps Dropdown ----
-  const appsDropdown = document.getElementById('appsDropdown');
+  // Highlight the Apps dropdown toggle when any .app-section is in the viewport
+  const appsDropdownToggle = document.querySelector('#navbarNav .dropdown-toggle');
   const appSections = document.querySelectorAll('.app-section');
 
-  if (appsDropdown && appSections.length > 0) {
+  if (appsDropdownToggle && appSections.length > 0) {
+    const visibleSections = new Set();
+
     const appObserver = new IntersectionObserver((entries) => {
-      const anyVisible = entries.some((entry) => entry.isIntersecting);
-      appsDropdown.classList.toggle('active', anyVisible);
-    }, { threshold: 0.2 });
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          visibleSections.add(entry.target);
+        } else {
+          visibleSections.delete(entry.target);
+        }
+      });
+      appsDropdownToggle.classList.toggle('active', visibleSections.size > 0);
+    }, { threshold: 0.1 });
 
     appSections.forEach((section) => appObserver.observe(section));
   }
 
   // ---- 3. Scroll Animations ----
+  // Trigger .animated class on .animate-on-scroll elements when they enter the viewport
   const animatedElements = document.querySelectorAll('.animate-on-scroll');
 
   if (animatedElements.length > 0) {
@@ -47,11 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ---- 4. Mobile Nav Close ----
+  // Collapse the hamburger menu when a nav link is clicked on mobile
   const navbarCollapse = document.getElementById('navbarNav');
 
-  if (navbarCollapse) {
+  if (navbarCollapse && typeof bootstrap !== 'undefined') {
     const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse, {
-      toggle: false
+      toggle: false,
     });
 
     navbarCollapse.querySelectorAll('.nav-link').forEach((link) => {
@@ -63,22 +76,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ---- 5. Contact Form ----
+  // ---- 5. Contact Form Handler ----
+  // Client-side validation with placeholder success feedback (no backend)
   const contactForm = document.getElementById('contact-form');
-  const formSuccess = document.getElementById('form-success');
 
-  if (contactForm && formSuccess) {
+  if (contactForm) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      // Reset validation
-      contactForm.querySelectorAll('.glass-input').forEach((input) => {
-        input.classList.remove('is-invalid', 'is-valid');
+      // Reset previous validation state
+      contactForm.querySelectorAll('.form-control').forEach((field) => {
+        field.classList.remove('is-invalid', 'is-valid');
       });
 
       let isValid = true;
 
-      // Validate required fields
+      // Validate all required fields
       contactForm.querySelectorAll('[required]').forEach((field) => {
         if (!field.value.trim()) {
           field.classList.add('is-invalid');
@@ -90,25 +105,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Validate email format
       const emailField = document.getElementById('email');
-      if (emailField.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailField.value)) {
-        emailField.classList.remove('is-valid');
-        emailField.classList.add('is-invalid');
+      if (emailField && emailField.value.trim() && !emailRegex.test(emailField.value.trim())) {
+        emailField.classList.replace('is-valid', 'is-invalid');
         isValid = false;
       }
 
-      if (isValid) {
-        contactForm.classList.add('d-none');
-        formSuccess.classList.remove('d-none');
+      if (!isValid) return;
 
-        setTimeout(() => {
-          contactForm.reset();
-          contactForm.querySelectorAll('.glass-input').forEach((input) => {
-            input.classList.remove('is-valid');
-          });
-          contactForm.classList.remove('d-none');
-          formSuccess.classList.add('d-none');
-        }, 3000);
-      }
+      // Show success message (placeholder — no backend call)
+      contactForm.innerHTML = `
+        <div class="text-center py-4" role="alert" aria-live="polite">
+          <i class="bi bi-check-circle-fill gradient-text display-4 mb-3 d-block"></i>
+          <h4 class="fw-bold mb-2">Message Sent!</h4>
+          <p class="text-muted mb-0">Thanks for reaching out. We'll get back to you soon.</p>
+        </div>
+      `;
+
+      // Reset form and restore after 3 seconds
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
     });
   }
 
