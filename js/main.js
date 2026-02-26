@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navbarCollapse && typeof bootstrap !== 'undefined') {
     const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse, { toggle: false });
 
-    navbarCollapse.querySelectorAll('.nav-link, .dropdown-item').forEach((link) => {
+    navbarCollapse.querySelectorAll('.nav-link:not(.dropdown-toggle), .dropdown-item').forEach((link) => {
       link.addEventListener('click', () => {
         if (navbarCollapse.classList.contains('show')) bsCollapse.hide();
       });
