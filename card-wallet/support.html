@@ -37,9 +37,26 @@
   <!-- ======================== NAVIGATION ======================== -->
   <nav class="navbar navbar-expand-lg fixed-top glass-nav">
     <div class="container">
-      <a class="navbar-brand fw-bold fs-4" href="../index.html#home">
-        <span class="gradient-text">e</span>Boxr
+      <a class="navbar-brand fw-bold fs-5 d-flex align-items-center gap-2" href="../index.html#card-wallet">
+        <img src="../assets/images/card-wallet-icon.png" alt="" width="28" height="28" class="rounded-2">
+        Card Wallet
       </a>
+      <button class="navbar-toggler border-0" type="button"
+              data-bs-toggle="collapse" data-bs-target="#subNavbar"
+              aria-controls="subNavbar" aria-expanded="false"
+              aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="subNavbar">
+        <ul class="navbar-nav ms-auto gap-1">
+          <li class="nav-item">
+            <a class="nav-link page-active" href="support.html">Support</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="privacy-policy.html">Privacy Policy</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 
@@ -119,5 +136,8 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+          crossorigin="anonymous"></script>
 </body>
 </html>
