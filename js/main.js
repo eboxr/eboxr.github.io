@@ -113,9 +113,17 @@
   /* ---------- Click handlers ---------- */
 
   // Any element with data-page routes to that virtual page (nav links,
-  // header CTA, mobile links, brand marks, hero buttons).
+  // header CTA, mobile links, brand marks, hero buttons). These triggers
+  // are <a data-page="…"> anchors, but the same attribute also marks the
+  // wrapping <section>, so a click on a *real* link nested inside a page
+  // (e.g. the card-wallet Privacy Policy / Support sub-page links, or the
+  // App Store badge) bubbles up here. Let the browser follow such links
+  // natively instead of swallowing the navigation.
   document.querySelectorAll('[data-page]').forEach((el) => {
     el.addEventListener('click', (event) => {
+      const anchor = event.target.closest('a');
+      if (anchor && !anchor.hasAttribute('data-page')) return;
+
       event.preventDefault();
       navigateTo(el.dataset.page);
     });
