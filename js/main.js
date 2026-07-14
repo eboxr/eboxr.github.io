@@ -1,173 +1,207 @@
-'use strict';
+(() => {
+  'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
+  // Hash-routed virtual-page SPA: one section visible at a time, menu-driven.
+  // Keeps the sticky header, custom mobile menu, and auto-year; replaces the
+  // scroll-spy + IntersectionObserver with page-activation reveals (.reveal
+  // elements stagger in when their page becomes active).
 
-  const VALID_PAGES = ['home', 'about', 'card-wallet', 'team'];
-  const PAGE_ALIASES = { services: 'about' };
-  const TRANSITION_DURATION = 300; // ms — matches pageExit animation
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const VALID_PAGES = ['home', 'about', 'services', 'card-wallet', 'team'];
+  const TRANSITION_DURATION = 250; // matches @keyframes pageExit
 
-  let isNavigating = false;
+  const header = document.getElementById('site-header');
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if (!header || !menuToggle || !mobileMenu) return;
+
+  const mobileLinks = mobileMenu.querySelectorAll('a');
+  const currentYear = document.getElementById('current-year');
+
+  const reducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+
   let currentPage = null;
+  let isNavigating = false;
 
-  // ---- Helpers ----
+  /* ---------- Router ---------- */
 
-  function getPage(name) {
-    return document.querySelector(`.page[data-page="${name}"]`);
-  }
+  const getPage = (name) =>
+    document.querySelector(`.page[data-page="${name}"]`);
 
-  function getPageFromHash() {
-    const hash = window.location.hash.replace('#', '');
-    if (PAGE_ALIASES[hash]) return PAGE_ALIASES[hash];
+  const getPageFromHash = () => {
+    const hash = location.hash.replace(/^#/, '');
     return VALID_PAGES.includes(hash) ? hash : 'home';
-  }
+  };
 
-  function activatePage(page, pageName) {
+  const updateNavActive = (pageName) => {
+    document
+      .querySelectorAll('.desktop-nav a[data-page], .mobile-menu a[data-page]')
+      .forEach((link) => {
+        link.classList.toggle('active', link.dataset.page === pageName);
+      });
+  };
+
+  const showPageElements = (page) => {
+    const els = page.querySelectorAll('.reveal');
+    els.forEach((el) => {
+      const delay = el.getAttribute('data-delay');
+      if (delay) el.style.transitionDelay = `${delay}ms`;
+      el.classList.add('visible');
+    });
+  };
+
+  const resetPageElements = (page) => {
+    const els = page.querySelectorAll('.reveal');
+    els.forEach((el) => {
+      el.classList.remove('visible');
+      el.style.transitionDelay = '';
+    });
+  };
+
+  const activatePage = (page, pageName, { focusHeading = true } = {}) => {
     page.classList.add('page-active');
     currentPage = pageName;
     updateNavActive(pageName);
     showPageElements(page);
     window.scrollTo(0, 0);
 
-    // Focus first heading for screen reader announcement
-    const heading = page.querySelector('h1, h2');
-    if (heading) {
-      heading.setAttribute('tabindex', '-1');
-      heading.focus({ preventScroll: true });
+    // Announce the new page to screen readers (without moving the scroll).
+    if (focusHeading) {
+      const heading = page.querySelector('h1, h2');
+      if (heading) {
+        heading.setAttribute('tabindex', '-1');
+        heading.focus({ preventScroll: true });
+      }
     }
-  }
+  };
 
-  // ---- 1. Hash Router ----
-
-  function navigateTo(pageName) {
+  const navigateTo = (pageName) => {
     if (isNavigating || pageName === currentPage) return;
-
     const target = getPage(pageName);
     if (!target) return;
 
-    const current = currentPage ? getPage(currentPage) : null;
-
-    if (window.location.hash !== `#${pageName}`) {
+    if (location.hash !== `#${pageName}`) {
       history.pushState(null, '', `#${pageName}`);
     }
 
+    const current = currentPage ? getPage(currentPage) : null;
+
+    // Instant swap: reduced motion, or first activation (no page to exit).
     if (reducedMotion || !current) {
       if (current) {
-        current.classList.remove('page-active', 'page-entering');
+        current.classList.remove('page-active');
+        resetPageElements(current);
       }
       activatePage(target, pageName);
       return;
     }
 
+    // Animated swap: fade current out, then activate target.
     isNavigating = true;
     current.classList.add('page-exiting');
 
     setTimeout(() => {
-      current.classList.remove('page-active', 'page-exiting', 'page-entering');
+      current.classList.remove('page-active', 'page-exiting');
       resetPageElements(current);
-
-      target.classList.add('page-entering');
       activatePage(target, pageName);
-
-      const unlock = () => {
-        target.classList.remove('page-entering');
-        isNavigating = false;
-        target.removeEventListener('animationend', unlock);
-        clearTimeout(fallback);
-      };
-      target.addEventListener('animationend', unlock);
-      // Safety fallback if animationend never fires
-      const fallback = setTimeout(unlock, 500);
+      isNavigating = false;
     }, TRANSITION_DURATION);
-  }
+  };
 
-  function showPageElements(page) {
-    page.querySelectorAll('.page-enter-animate').forEach((el, i) => {
-      const delay = parseInt(el.dataset.delay, 10) || (i * 100);
-      if (reducedMotion) {
-        el.classList.add('animated');
-      } else {
-        setTimeout(() => {
-          el.style.transitionDelay = `${delay}ms`;
-          el.classList.add('animated');
-        }, 50);
-      }
-    });
-  }
+  /* ---------- Click handlers ---------- */
 
-  function resetPageElements(page) {
-    page.querySelectorAll('.page-enter-animate').forEach((el) => {
-      el.classList.remove('animated');
-      el.style.transitionDelay = '';
-    });
-  }
-
-  function updateNavActive(pageName) {
-    document.querySelectorAll('.nav-link[data-page], .dropdown-item[data-page]').forEach((link) => {
-      link.classList.remove('page-active');
-    });
-
-    const activeLink = document.querySelector(`.nav-link[data-page="${pageName}"]`);
-    if (activeLink) activeLink.classList.add('page-active');
-
-    const appsDropdown = document.getElementById('appsDropdown');
-    if (appsDropdown) {
-      const dropdownItem = document.querySelector(`.dropdown-item[data-page="${pageName}"]`);
-      appsDropdown.classList.toggle('page-active', !!dropdownItem);
-      if (dropdownItem) dropdownItem.classList.add('page-active');
-    }
-  }
-
-  // ---- 2. Navigation Events ----
-
-  document.querySelectorAll('.nav-link[data-page], .dropdown-item[data-page], .navbar-brand[data-page]').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      navigateTo(link.dataset.page);
+  // Any element with data-page routes to that virtual page (nav links,
+  // header CTA, mobile links, brand marks, hero buttons).
+  document.querySelectorAll('[data-page]').forEach((el) => {
+    el.addEventListener('click', (event) => {
+      event.preventDefault();
+      navigateTo(el.dataset.page);
     });
   });
 
-  document.querySelectorAll('.nav-page-link').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const hash = link.getAttribute('href').replace('#', '');
-      if (VALID_PAGES.includes(hash)) navigateTo(hash);
+  // Footer "Back to top" scrolls the current page to top (no page change).
+  document.querySelectorAll('[data-scroll-top]').forEach((el) => {
+    el.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: reducedMotion ? 'auto' : 'smooth',
+      });
     });
   });
 
-  window.addEventListener('hashchange', () => navigateTo(getPageFromHash()));
+  // Back/forward navigation.
+  window.addEventListener('hashchange', () => {
+    navigateTo(getPageFromHash());
+  });
 
-  // Prevent placeholder href="#" links from changing the hash
-  document.querySelectorAll('a[href="#"]').forEach((link) => {
-    if (!link.dataset.page && !link.dataset.bsToggle) {
-      link.addEventListener('click', (e) => e.preventDefault());
+  /* ---------- Mobile menu ---------- */
+
+  const setMenuState = (isOpen) => {
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuToggle.setAttribute(
+      'aria-label',
+      isOpen ? 'Close navigation menu' : 'Open navigation menu'
+    );
+    mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+    mobileMenu.classList.toggle('open', isOpen);
+    document.body.classList.toggle('menu-open', isOpen);
+  };
+
+  const closeMenu = () => setMenuState(false);
+
+  menuToggle.addEventListener('click', () => {
+    const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+    setMenuState(!isOpen);
+  });
+
+  mobileLinks.forEach((link) => link.addEventListener('click', closeMenu));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMenu();
+      menuToggle.focus();
     }
   });
 
-  // ---- 3. Initial Load ----
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) closeMenu();
+  });
 
-  if (!window.location.hash || !VALID_PAGES.includes(window.location.hash.replace('#', ''))) {
+  /* ---------- Sticky header (solidifies on intra-page scroll) ---------- */
+
+  const updateHeader = () => {
+    header.classList.toggle('scrolled', window.scrollY > 16);
+  };
+
+  window.addEventListener('scroll', updateHeader, { passive: true });
+
+  /* ---------- Auto copyright year ---------- */
+
+  if (currentYear) {
+    const year = new Date().getFullYear();
+    if (year > 2026) currentYear.textContent = String(year);
+  }
+
+  /* ---------- Initial load ---------- */
+
+  if (
+    !location.hash ||
+    !VALID_PAGES.includes(location.hash.replace(/^#/, ''))
+  ) {
     history.replaceState(null, '', '#home');
   }
 
-  document.querySelectorAll('.page').forEach((p) => p.classList.remove('page-active'));
+  // Strip any server-rendered active state so activation is deterministic.
+  document.querySelectorAll('.page').forEach((page) => {
+    page.classList.remove('page-active');
+  });
 
   const initialPage = getPageFromHash();
-  const initialTarget = getPage(initialPage);
-  if (initialTarget) activatePage(initialTarget, initialPage);
+  const initialEl = getPage(initialPage);
+  if (initialEl) activatePage(initialEl, initialPage, { focusHeading: false });
 
-  // ---- 4. Mobile Nav Close ----
-
-  const navbarCollapse = document.getElementById('navbarNav');
-
-  if (navbarCollapse && typeof bootstrap !== 'undefined') {
-    const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarCollapse, { toggle: false });
-
-    navbarCollapse.querySelectorAll('.nav-link:not(.dropdown-toggle), .dropdown-item').forEach((link) => {
-      link.addEventListener('click', () => {
-        if (navbarCollapse.classList.contains('show')) bsCollapse.hide();
-      });
-    });
-  }
-
-});
+  updateHeader();
+})();

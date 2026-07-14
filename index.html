@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
   <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
   <link rel="manifest" href="assets/favicon/site.webmanifest">
-  <meta name="theme-color" content="#0a0e27">
+  <meta name="theme-color" content="#080b10">
+
   <title>eBoxr — iOS &amp; Web App Development Studio</title>
   <meta name="description" content="eBoxr is a small studio crafting thoughtful iOS and web applications. Makers of Rewards Card Wallet — organize all your loyalty cards in one app.">
   <meta name="robots" content="index, follow">
@@ -29,325 +31,454 @@
   <meta name="twitter:description" content="A small team building thoughtful iOS and web apps. Makers of Rewards Card Wallet.">
   <meta name="twitter:image" content="https://eboxr.com/assets/images/card-wallet-screenshot.png">
 
-  <!-- Bootstrap 5.3.8 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-        crossorigin="anonymous">
-
-  <!-- Bootstrap Icons 1.13.1 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-        rel="stylesheet"
-        integrity="sha384-CK2SzKma4jA5H/MXDUU7i1TqZlCFaD4T01vtyDFvPlD97JQyS+IsSh1nI2EFbpyk"
-        crossorigin="anonymous">
-
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Inter (variable, 100-900 for heavy display weights) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Skip Navigation -->
-  <a class="skip-nav" href="#main">Skip to content</a>
-
-  <!-- ======================== NAVIGATION ======================== -->
-  <nav class="navbar navbar-expand-lg fixed-top glass-nav" id="navbar">
-    <div class="container">
-      <a class="navbar-brand fw-bold fs-4" href="#home" data-page="home">
-        <span class="gradient-text">e</span>Boxr
+  <!-- ======================== HEADER ======================== -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home" data-page="home" aria-label="eBoxr home">
+        <span class="brand-mark" aria-hidden="true">e</span>
+        <span class="brand-word">e<span>Boxr</span></span>
       </a>
-      <button class="navbar-toggler border-0" type="button"
-              data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false"
-              aria-label="Toggle navigation">
-        <i class="bi bi-list"></i>
+
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="#home" data-page="home">Home</a>
+        <a href="#about" data-page="about">About</a>
+        <a href="#services" data-page="services">Services</a>
+        <a href="#team" data-page="team">Team</a>
+      </nav>
+
+      <a class="header-cta" href="#card-wallet" data-page="card-wallet">
+        Card Wallet
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" type="button"
+              aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto gap-1">
-          <li class="nav-item">
-            <a class="nav-link" href="#home" data-page="home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#about" data-page="about">Services</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button"
-               data-bs-toggle="dropdown" aria-expanded="false" id="appsDropdown">Apps</a>
-            <ul class="dropdown-menu glass-dropdown">
-              <li><a class="dropdown-item" href="#card-wallet" data-page="card-wallet">Rewards Card Wallet</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#team" data-page="team">Team</a>
-          </li>
-        </ul>
-      </div>
     </div>
+  </header>
+
+  <!-- ======================== MOBILE NAV ======================== -->
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" aria-hidden="true">
+    <a href="#home" data-page="home">Home</a>
+    <a href="#about" data-page="about">About</a>
+    <a href="#services" data-page="services">Services</a>
+    <a href="#team" data-page="team">Team</a>
+    <a href="#card-wallet" data-page="card-wallet">Rewards Card Wallet</a>
   </nav>
 
   <main id="main">
+    <!-- ======================== HERO ======================== -->
+    <section class="hero page page-active" id="home" data-page="home">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="hero-badge reveal">
+            <span class="status-dot"></span>
+            Independent iOS &amp; web studio
+          </div>
 
-    <!-- ======================== HOME ======================== -->
-    <section class="page page-active" id="home" data-page="home">
-      <div class="hero-section">
-        <div class="hero-bg"></div>
-        <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
-        <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
-        <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
-        <div class="container position-relative">
-          <div class="row justify-content-center text-center">
-            <div class="col-lg-8">
-              <h1 class="display-3 fw-bold mb-4">
-                We build apps that <span class="gradient-text">matter.</span>
-              </h1>
-              <p class="lead text-muted mb-5">
-                A small team crafting thoughtful iOS and web applications.
-              </p>
-              <div class="d-flex gap-3 justify-content-center flex-wrap">
-                <a href="#about" class="btn btn-cta btn-lg nav-page-link">About Us</a>
-                <a href="#team" class="btn btn-outline-light btn-lg nav-page-link">Meet the Team</a>
+          <h1 class="reveal delay-1">
+            We build apps
+            <span class="accent-line">that matter.</span>
+          </h1>
+
+          <p class="hero-lead reveal delay-2">
+            A small team crafting thoughtful iOS and web applications.
+          </p>
+
+          <div class="hero-actions reveal delay-2">
+            <a class="button button-primary" href="#about" data-page="about">
+              About Us
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+
+            <a class="button button-secondary" href="#team" data-page="team">
+              Meet the Team
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orbit orbit-one">
+            <span class="orbit-dot"></span>
+          </div>
+
+          <div class="orbit orbit-two"></div>
+
+          <div class="code-card">
+            <div class="code-card-header">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="code-label">eboxr.swift</span>
+            </div>
+
+            <div class="code-lines">
+              <div class="code-line">
+                <span class="line-number">1</span>
+                <span class="line-content line-green" style="width: 35%"></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">2</span>
+                <span class="line-content" style="width: 76%"></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">3</span>
+                <span class="line-content line-blue" style="width: 55%"></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">4</span>
+                <span class="line-content" style="width: 82%"></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">5</span>
+                <span class="line-content line-orange" style="width: 44%"></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">6</span>
+                <span class="line-content" style="width: 68%"></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">7</span>
+                <span class="line-content line-green" style="width: 24%"></span>
+              </div>
+              <div class="code-line">
+                <span class="line-number">8</span>
+                <span class="line-content" style="width: 60%"></span>
               </div>
             </div>
+          </div>
+
+          <div class="floating-tag">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M8 7V5a4 4 0 0 1 8 0v2M6 7h12l1 14H5L6 7Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            From concept to App Store
           </div>
         </div>
       </div>
     </section>
 
     <!-- ======================== ABOUT ======================== -->
-    <section class="page" id="about" data-page="about">
-      <div class="container py-5">
-        <div class="row align-items-center g-5">
-          <div class="col-lg-6 page-enter-animate">
-            <h2 class="display-5 fw-bold mb-4">
-              About <span class="gradient-text">eBoxr</span>
-            </h2>
-            <p class="text-muted mb-3">
+    <section class="section page" id="about" data-page="about">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">About eBoxr</span>
+          <h2>Small team.<br>Big ambitions.</h2>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-copy reveal">
+            <p>
               Small team, big ambitions. We're Stephanie and Nicolas — two developers
-              who believe great software starts with genuine care for the people who use it.
+              who believe great software starts with genuine care for the people who
+              use it.
             </p>
-            <p class="text-muted">
-              We focus on quality over quantity, crafting each project with attention to
-              detail, clean code, and thoughtful design. From native iOS apps to modern
-              web experiences, we build things we're proud of.
+
+            <p>
+              We focus on quality over quantity, crafting each project with attention
+              to detail, clean code, and thoughtful design. From native iOS apps to
+              modern web experiences, we build things we're proud of.
             </p>
           </div>
-          <div class="col-lg-6 page-enter-animate" data-delay="200">
-            <div class="glass-card p-4">
-              <div class="row text-center g-4">
-                <div class="col-6">
-                  <h3 class="gradient-text display-6 fw-bold mb-1">2</h3>
-                  <p class="text-muted mb-0">Developers</p>
-                </div>
-                <div class="col-6">
-                  <h3 class="gradient-text display-6 fw-bold mb-1">iOS</h3>
-                  <p class="text-muted mb-0">&amp; Web</p>
-                </div>
-                <div class="col-6">
-                  <h3 class="gradient-text display-6 fw-bold mb-1">100%</h3>
-                  <p class="text-muted mb-0">Passion</p>
-                </div>
-                <div class="col-6">
-                  <i class="bi bi-heart-fill gradient-text display-6"></i>
-                  <p class="text-muted mb-0 mt-1">Quality Focus</p>
-                </div>
+
+          <div class="metrics">
+            <article class="metric reveal">
+              <strong class="metric-value">2</strong>
+              <span class="metric-label">Developers</span>
+            </article>
+
+            <article class="metric reveal delay-1">
+              <strong class="metric-value">iOS</strong>
+              <span class="metric-label">&amp; Web</span>
+            </article>
+
+            <article class="metric metric-wide reveal delay-2">
+              <strong class="metric-value">100%</strong>
+              <span class="metric-label">Passion · Quality Focus</span>
+              <div class="quality-bar" aria-hidden="true">
+                <span></span>
               </div>
-            </div>
-          </div>
-        </div>
-        <!-- Services -->
-        <hr class="my-5 border-secondary border-opacity-25">
-        <div class="text-center mb-5 page-enter-animate" data-delay="300">
-          <h2 class="display-5 fw-bold">What We <span class="gradient-text">Do</span></h2>
-          <p class="text-muted mt-3">From concept to App Store — we handle it all.</p>
-        </div>
-        <div class="row g-4">
-          <div class="col-md-4 page-enter-animate" data-delay="350">
-            <div class="glass-card service-card p-4 text-center h-100">
-              <i class="bi bi-phone display-4 gradient-text mb-3 d-block"></i>
-              <h3 class="h5 fw-bold">iOS Development</h3>
-              <p class="text-muted mb-0">
-                Native Swift apps for iPhone and iPad, built with modern
-                frameworks and a focus on performance.
-              </p>
-            </div>
-          </div>
-          <div class="col-md-4 page-enter-animate" data-delay="500">
-            <div class="glass-card service-card p-4 text-center h-100">
-              <i class="bi bi-globe display-4 gradient-text mb-3 d-block"></i>
-              <h3 class="h5 fw-bold">Web Applications</h3>
-              <p class="text-muted mb-0">
-                Modern, responsive web experiences that work beautifully
-                across every device and browser.
-              </p>
-            </div>
-          </div>
-          <div class="col-md-4 page-enter-animate" data-delay="650">
-            <div class="glass-card service-card p-4 text-center h-100">
-              <i class="bi bi-palette display-4 gradient-text mb-3 d-block"></i>
-              <h3 class="h5 fw-bold">UI/UX Design</h3>
-              <p class="text-muted mb-0">
-                Clean, intuitive interfaces designed with real users in mind.
-                Form follows function — always.
-              </p>
-            </div>
+            </article>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ======================== CARD WALLET ======================== -->
-    <section class="page" id="card-wallet" data-page="card-wallet">
-      <div class="container py-5">
-        <div class="row align-items-center g-5">
-          <div class="col-lg-6 page-enter-animate">
-            <img src="assets/images/card-wallet-screenshot.png" alt="Rewards Card Wallet app screenshot showing loyalty cards management" class="img-fluid rounded-4">
-          </div>
-          <div class="col-lg-6 page-enter-animate" data-delay="200">
-            <span class="badge rounded-pill bg-primary mb-3 fs-6">
-              <i class="bi bi-apple me-1"></i> iOS
+    <!-- ======================== SERVICES ======================== -->
+    <section class="section page" id="services" data-page="services">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">What We Do</span>
+          <h2>From concept to<br>App Store.</h2>
+          <p>We handle it all.</p>
+        </div>
+
+        <div class="services-grid">
+          <article class="service-card reveal">
+            <span class="service-number" aria-hidden="true">01</span>
+
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="6" y="2" width="12" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M10 5h4M11 19h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <h3>iOS Development</h3>
+
+            <p>
+              Native Swift apps for iPhone and iPad, built with modern frameworks and
+              a focus on performance.
+            </p>
+          </article>
+
+          <article class="service-card reveal delay-1">
+            <span class="service-number" aria-hidden="true">02</span>
+
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="4" width="20" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M2 8h20M6 6h.01M9 6h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <h3>Web Applications</h3>
+
+            <p>
+              Modern, responsive web experiences that work beautifully across every
+              device and browser.
+            </p>
+          </article>
+
+          <article class="service-card reveal delay-2">
+            <span class="service-number" aria-hidden="true">03</span>
+
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="m4 20 5.2-1.1L19 9.1 14.9 5 5.1 14.8 4 20Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="m12.8 7.1 4.1 4.1M15.8 4.1l1-1a1.8 1.8 0 0 1 2.5 0l1.6 1.6a1.8 1.8 0 0 1 0 2.5l-1 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <h3>UI/UX Design</h3>
+
+            <p>
+              Clean, intuitive interfaces designed with real users in mind. Form
+              follows function — always.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== CARD WALLET (FEATURED APP) ======================== -->
+    <section class="section app-section page" id="card-wallet" data-page="card-wallet">
+      <div class="container">
+        <article class="app-panel reveal">
+          <div class="app-copy">
+            <span class="platform-label">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.79 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.09ZM12.03 7.25C11.88 5.02 13.69 3.18 15.77 3c.29 2.58-2.34 4.5-3.74 4.25Z"/>
+              </svg>
+              iOS
             </span>
-            <h3 class="h2 fw-bold mb-3">Rewards Card Wallet</h3>
-            <p class="text-muted mb-4">
+
+            <h2>Rewards Card Wallet</h2>
+
+            <p>
               Keep all your loyalty and rewards cards organized in one beautiful app.
               No more digging through your physical wallet or forgetting cards at home.
             </p>
-            <ul class="list-unstyled mb-4">
-              <li class="mb-2">
-                <i class="bi bi-check-circle gradient-text me-2"></i>
+
+            <ul class="feature-list">
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 Scan &amp; store cards instantly via camera
               </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle gradient-text me-2"></i>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 Add cards to Apple Wallet from your lock screen
               </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle gradient-text me-2"></i>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 Sort, archive, and search all your cards
               </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle gradient-text me-2"></i>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 AES-256 encryption — no analytics, no tracking
               </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle gradient-text me-2"></i>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 Free for 5 cards, one-time purchase for unlimited
               </li>
             </ul>
-            <a href="https://apps.apple.com/us/app/rewards-card-wallet/id6759362342" target="_blank" rel="noopener noreferrer">
-              <img src="assets/images/download-on-the-app-store.svg" alt="Download on the App Store" height="48">
-            </a>
-            <div class="mt-4 pt-2 d-flex gap-3">
-              <a href="card-wallet/privacy-policy.html" class="text-decoration-none small" style="color: #007AFF;">Privacy Policy</a>
-              <a href="card-wallet/support.html" class="text-decoration-none small" style="color: #007AFF;">Support</a>
+
+            <div class="app-actions">
+              <a class="app-store-badge"
+                 href="https://apps.apple.com/us/app/rewards-card-wallet/id6759362342"
+                 target="_blank" rel="noopener noreferrer"
+                 aria-label="Download Rewards Card Wallet on the App Store">
+                <img src="assets/images/download-on-the-app-store.svg" alt="Download on the App Store" height="48">
+              </a>
+
+              <a class="text-link" href="card-wallet/privacy-policy.html">Privacy Policy</a>
+              <a class="text-link" href="card-wallet/support.html">Support</a>
             </div>
           </div>
-        </div>
+
+          <div class="app-visual">
+            <div class="app-glow"></div>
+
+            <img class="app-screenshot"
+                 src="assets/images/card-wallet-screenshot.png"
+                 alt="Rewards Card Wallet app screenshot showing loyalty cards management"
+                 width="1000" height="586" loading="lazy">
+          </div>
+        </article>
       </div>
     </section>
 
     <!-- ======================== TEAM ======================== -->
-    <section class="page" id="team" data-page="team">
-      <div class="container py-5">
-        <div class="text-center mb-5 page-enter-animate">
-          <h2 class="display-5 fw-bold">Meet the <span class="gradient-text">Team</span></h2>
-          <p class="text-muted mt-3">The humans behind the code.</p>
+    <section class="section page" id="team" data-page="team">
+      <div class="container">
+        <div class="section-heading reveal">
+          <span class="eyebrow">Meet the Team</span>
+          <h2>The humans<br>behind the code.</h2>
         </div>
-        <div class="row g-4 justify-content-center">
+
+        <div class="team-grid">
           <!-- Stephanie -->
-          <div class="col-md-6 col-lg-5 page-enter-animate">
-            <div class="glass-card p-4 text-center">
-              <img src="assets/images/stephanie.jpg" alt="Stephanie" class="avatar mx-auto mb-3" width="80" height="80">
-              <h3 class="h5 fw-bold mb-1">Stephanie</h3>
-              <p class="gradient-text fw-medium mb-3">CTO &amp; Technology Leader</p>
-              <p class="text-muted small mb-4">
-                Technology leader with strategic vision and a passion for
-                scaling platforms. Stephanie drives AI-driven innovation
-                and builds high-performing teams.
+          <article class="team-card reveal">
+            <div class="team-photo">
+              <img src="assets/images/stephanie.jpg" alt="Stephanie" width="600" height="600" loading="lazy">
+            </div>
+
+            <div class="team-content">
+              <h3>Stephanie</h3>
+              <p class="team-role">CTO &amp; Technology Leader</p>
+              <p class="team-bio">
+                Technology leader with strategic vision and a passion for scaling
+                platforms. Stephanie drives AI-driven innovation and builds
+                high-performing teams.
               </p>
-              <div class="d-flex justify-content-center gap-3">
-                <a href="https://github.com/herbertia" class="social-link" aria-label="Stephanie's GitHub">
-                  <i class="bi bi-github"></i>
+
+              <div class="social-links" aria-label="Stephanie's profiles">
+                <a class="social-link" href="https://github.com/herbertia" target="_blank" rel="noopener noreferrer" aria-label="Stephanie on GitHub">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 .7a11.3 11.3 0 0 0-3.57 22c.57.1.77-.24.77-.54v-2.2c-3.15.68-3.81-1.34-3.81-1.34-.52-1.31-1.26-1.66-1.26-1.66-1.03-.71.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.4-1.23.72-1.51-2.51-.29-5.15-1.26-5.15-5.59 0-1.23.44-2.24 1.17-3.03-.12-.29-.51-1.44.11-2.99 0 0 .95-.31 3.11 1.16A10.8 10.8 0 0 1 12 6.04c.96 0 1.92.13 2.82.38 2.16-1.47 3.11-1.16 3.11-1.16.62 1.55.23 2.7.11 2.99.73.79 1.17 1.8 1.17 3.03 0 4.34-2.65 5.3-5.17 5.58.41.35.77 1.04.77 2.1v3.2c0 .3.2.65.78.54A11.3 11.3 0 0 0 12 .7Z"/>
+                  </svg>
                 </a>
-                <a href="https://www.linkedin.com/in/stephanie-rochelemagne-864b8b63/" class="social-link" aria-label="Stephanie's LinkedIn">
-                  <i class="bi bi-linkedin"></i>
+                <a class="social-link" href="https://www.linkedin.com/in/stephanie-rochelemagne-864b8b63/" target="_blank" rel="noopener noreferrer" aria-label="Stephanie on LinkedIn">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5.37 3.5A2.37 2.37 0 1 1 .63 3.5a2.37 2.37 0 0 1 4.74 0ZM.98 7.2h4.78V22H.98V7.2Zm7.63 0h4.58v2.02h.06c.64-1.21 2.2-2.49 4.53-2.49 4.84 0 5.74 3.19 5.74 7.33V22h-4.77v-7.04c0-1.68-.03-3.84-2.34-3.84-2.34 0-2.7 1.83-2.7 3.72V22H8.61V7.2Z"/>
+                  </svg>
                 </a>
-                <a href="https://stephanie.rochelemagne.com" class="social-link" aria-label="Stephanie's Portfolio">
-                  <i class="bi bi-globe"></i>
+                <a class="social-link" href="https://stephanie.rochelemagne.com" target="_blank" rel="noopener noreferrer" aria-label="Stephanie's website">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M3.5 12h17M12 3c2.2 2.47 3.33 5.47 3.4 9-.07 3.53-1.2 6.53-3.4 9-2.2-2.47-3.33-5.47-3.4-9C8.67 8.47 9.8 5.47 12 3Z" stroke="currentColor" stroke-width="1.8"/>
+                  </svg>
                 </a>
               </div>
             </div>
-          </div>
+          </article>
+
           <!-- Nicolas -->
-          <div class="col-md-6 col-lg-5 page-enter-animate" data-delay="200">
-            <div class="glass-card p-4 text-center">
-              <img src="assets/images/nicolas.jpg" alt="Nicolas" class="avatar mx-auto mb-3" width="80" height="80">
-              <h3 class="h5 fw-bold mb-1">Nicolas</h3>
-              <p class="gradient-text fw-medium mb-3">Engineering Manager &amp; AI Advocate</p>
-              <p class="text-muted small mb-4">
-                Systems engineer bridging open-source expertise with
-                AI-driven workflows. Nicolas designs agentic solutions
-                and accelerates team delivery.
+          <article class="team-card reveal delay-1">
+            <div class="team-photo">
+              <img src="assets/images/nicolas.jpg" alt="Nicolas" width="1000" height="1000" loading="lazy">
+            </div>
+
+            <div class="team-content">
+              <h3>Nicolas</h3>
+              <p class="team-role">Engineering Manager &amp; AI Advocate</p>
+              <p class="team-bio">
+                Systems engineer bridging open-source expertise with AI-driven
+                workflows. Nicolas designs agentic solutions and accelerates team
+                delivery.
               </p>
-              <div class="d-flex justify-content-center gap-3">
-                <a href="https://github.com/atoomic" class="social-link" aria-label="Nicolas's GitHub">
-                  <i class="bi bi-github"></i>
+
+              <div class="social-links" aria-label="Nicolas's profiles">
+                <a class="social-link" href="https://github.com/atoomic" target="_blank" rel="noopener noreferrer" aria-label="Nicolas on GitHub">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 .7a11.3 11.3 0 0 0-3.57 22c.57.1.77-.24.77-.54v-2.2c-3.15.68-3.81-1.34-3.81-1.34-.52-1.31-1.26-1.66-1.26-1.66-1.03-.71.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.73 2.65 1.23 3.3.94.1-.73.4-1.23.72-1.51-2.51-.29-5.15-1.26-5.15-5.59 0-1.23.44-2.24 1.17-3.03-.12-.29-.51-1.44.11-2.99 0 0 .95-.31 3.11 1.16A10.8 10.8 0 0 1 12 6.04c.96 0 1.92.13 2.82.38 2.16-1.47 3.11-1.16 3.11-1.16.62 1.55.23 2.7.11 2.99.73.79 1.17 1.8 1.17 3.03 0 4.34-2.65 5.3-5.17 5.58.41.35.77 1.04.77 2.1v3.2c0 .3.2.65.78.54A11.3 11.3 0 0 0 12 .7Z"/>
+                  </svg>
                 </a>
-                <a href="https://www.linkedin.com/in/nicolas-rochelemagne-71b4722/" class="social-link" aria-label="Nicolas's LinkedIn">
-                  <i class="bi bi-linkedin"></i>
+                <a class="social-link" href="https://www.linkedin.com/in/nicolas-rochelemagne-71b4722/" target="_blank" rel="noopener noreferrer" aria-label="Nicolas on LinkedIn">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M5.37 3.5A2.37 2.37 0 1 1 .63 3.5a2.37 2.37 0 0 1 4.74 0ZM.98 7.2h4.78V22H.98V7.2Zm7.63 0h4.58v2.02h.06c.64-1.21 2.2-2.49 4.53-2.49 4.84 0 5.74 3.19 5.74 7.33V22h-4.77v-7.04c0-1.68-.03-3.84-2.34-3.84-2.34 0-2.7 1.83-2.7 3.72V22H8.61V7.2Z"/>
+                  </svg>
                 </a>
-                <a href="https://x.com/atoomic" class="social-link" aria-label="Nicolas's X">
-                  <i class="bi bi-twitter-x"></i>
+                <a class="social-link" href="https://x.com/atoomic" target="_blank" rel="noopener noreferrer" aria-label="Nicolas on X">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.36l7.25-8.29L2.97 2H9.37l4.42 5.84L18.9 2Zm-1.09 17.84h1.73L8.43 4.05H6.58l11.23 15.79Z"/>
+                  </svg>
                 </a>
-                <a href="https://atoomic.org" class="social-link" aria-label="Nicolas's Portfolio">
-                  <i class="bi bi-globe"></i>
+                <a class="social-link" href="https://atoomic.org" target="_blank" rel="noopener noreferrer" aria-label="Nicolas's website">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M3.5 12h17M12 3c2.2 2.47 3.33 5.47 3.4 9-.07 3.53-1.2 6.53-3.4 9-2.2-2.47-3.33-5.47-3.4-9C8.67 8.47 9.8 5.47 12 3Z" stroke="currentColor" stroke-width="1.8"/>
+                  </svg>
                 </a>
               </div>
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- ======================== FOOTER ======================== -->
-  <footer class="py-4 border-top border-secondary border-opacity-25">
+  <!-- ======================== FOOTER (persistent, slim) ======================== -->
+  <footer class="site-footer">
     <div class="container">
-      <div class="row align-items-center text-center text-md-start">
-        <div class="col-md-4 mb-3 mb-md-0">
-          <span class="fw-bold fs-5">
-            <span class="gradient-text">e</span>Boxr
-          </span>
-        </div>
-        <div class="col-md-4 mb-3 mb-md-0">
-          <p class="text-muted mb-0">&copy; 2026 eBoxr. All rights reserved.</p>
-        </div>
-        <div class="col-md-4 text-md-end">
-          <a href="#" class="social-link me-3" aria-label="GitHub">
-            <i class="bi bi-github"></i>
-          </a>
-          <a href="#" class="social-link me-3" aria-label="X">
-            <i class="bi bi-twitter-x"></i>
-          </a>
-          <a href="#" class="social-link" aria-label="LinkedIn">
-            <i class="bi bi-linkedin"></i>
-          </a>
-        </div>
+      <div class="footer-bottom">
+        <a class="brand" href="#home" data-page="home" aria-label="eBoxr home">
+          <span class="brand-mark" aria-hidden="true">e</span>
+          <span class="brand-word">e<span>Boxr</span></span>
+        </a>
+
+        <p>© <span id="current-year">2026</span> eBoxr. All rights reserved.</p>
+
+        <a class="back-to-top" href="#" data-scroll-top>
+          Back to top
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m6 14 6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
   </footer>
 
-  <!-- Bootstrap 5.3.8 JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-          crossorigin="anonymous"></script>
-
-  <!-- Custom JS -->
   <script src="js/main.js"></script>
 </body>
 </html>
