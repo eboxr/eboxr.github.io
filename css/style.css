@@ -129,6 +129,14 @@ a {
   outline-offset: 4px;
 }
 
+/* Headings focused programmatically on page change (for SR announcement) use
+   tabindex="-1" — they're not keyboard tab targets, so suppress the visible
+   outline that would otherwise ring the title after each click. */
+[tabindex="-1"]:focus,
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+
 .container {
   width: min(calc(100% - 40px), var(--container));
   margin-inline: auto;
