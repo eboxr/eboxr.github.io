@@ -36,8 +36,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css">
+  <!-- Custom CSS — bump ?v= on every deploy to bypass browser cache
+       (GitHub Pages serves with max-age=600, so unversioned assets can
+       leave visitors with a stale CSS/JS during a deploy window). -->
+  <link rel="stylesheet" href="css/style.css?v=20260714">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -479,6 +481,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=20260714"></script>
 </body>
 </html>
